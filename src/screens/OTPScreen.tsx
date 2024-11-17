@@ -22,7 +22,7 @@ const OTPScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <Text style={[styles.title, { color: theme.colors.primary }]}>Enter OTP</Text>
       <TextInput
         label="5-digit OTP"
@@ -36,7 +36,8 @@ const OTPScreen = () => {
       <Button
         mode="contained"
         onPress={handleVerifyOTP}
-        style={styles.button}
+        style={[styles.button, { backgroundColor: theme.colors.primary }]}
+        textColor={theme.colors.onPrimary}
       >
         Verify OTP
       </Button>
@@ -49,7 +50,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 16,
-    backgroundColor: '#f8f9fa',
   },
   title: {
     fontSize: 24,

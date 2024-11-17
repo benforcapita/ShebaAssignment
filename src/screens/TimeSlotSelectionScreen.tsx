@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenNames } from '../navigation/types';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type TimeSlotScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -51,16 +52,20 @@ const TimeSlotSelectionScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <Text style={[styles.title, { color: theme.colors.primary }]}>Select Date and Time</Text>
-      <Text style={styles.subtitle}>Available Dates:</Text>
+      <Text style={[styles.subtitle, { color: theme.colors.onSurface }]}>Available Dates:</Text>
       <View style={styles.chipContainer}>
         {selectedDoctor.availableDates.map((date) => (
           <Chip
             key={date}
             selected={selectedDate === date}
             onPress={() => handleDateSelect(date)}
-            style={styles.chip}
+            style={[
+              styles.chip,
+              selectedDate === date && { backgroundColor: theme.colors.primary },
+            ]}
+            textStyle={selectedDate === date ? { color: theme.colors.onPrimary } : { color: theme.colors.onSurface }}
           >
             {date}
           </Chip>
@@ -68,14 +73,18 @@ const TimeSlotSelectionScreen = () => {
       </View>
       {selectedDate && (
         <>
-          <Text style={styles.subtitle}>Available Times:</Text>
+          <Text style={[styles.subtitle, { color: theme.colors.onSurface }]}>Available Times:</Text>
           <View style={styles.chipContainer}>
             {selectedDoctor.timeSlots.map((time) => (
               <Chip
                 key={time}
                 selected={selectedTime === time}
                 onPress={() => handleTimeSelect(time)}
-                style={styles.chip}
+                style={[
+                  styles.chip,
+                  selectedTime === time && { backgroundColor: theme.colors.primary },
+                ]}
+                textStyle={selectedTime === time ? { color: theme.colors.onPrimary } : { color: theme.colors.onSurface }}
               >
                 {time}
               </Chip>
@@ -87,10 +96,12 @@ const TimeSlotSelectionScreen = () => {
         mode="contained"
         onPress={handleConfirm}
         style={styles.confirmButton}
+        buttonColor={theme.colors.primary}
+        textColor={theme.colors.onPrimary}
       >
         Confirm Appointment
       </Button>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -98,12 +109,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#f8f9fa',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
+    textAlign: 'center',
   },
   subtitle: {
     fontSize: 18,

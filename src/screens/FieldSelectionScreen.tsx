@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenNames } from '../navigation/types';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type FieldSelectionNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -27,26 +28,23 @@ const FieldSelectionScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.innercerContainer}>
-        <List.Section>
-          <List.Subheader style={[styles.title, { color: theme.colors.primary }]}>
-            Select a Medical Field
-          </List.Subheader>
-          {fields.map((field) => (
-            <List.Item
-              key={field}
-              title={field}
-              onPress={() => handleFieldSelect(field)}
-              style={styles.option}
-              titleStyle={styles.optionText}
-              right={(props) => <List.Icon {...props} icon="chevron-right" />}
-            />
-          ))}
-        </List.Section>
-      </View>
-
-    </View>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <List.Section>
+        <List.Subheader style={[styles.title, { color: theme.colors.primary }]}>
+          Select a Medical Field
+        </List.Subheader>
+        {fields.map((field) => (
+          <List.Item
+            key={field}
+            title={field}
+            onPress={() => handleFieldSelect(field)}
+            style={[styles.option, { borderBottomColor: theme.colors.onSurface }]}
+            titleStyle={[styles.optionText, { color: theme.colors.onSurface }]}
+            right={(props) => <List.Icon {...props} icon="chevron-right" />}
+          />
+        ))}
+      </List.Section>
+    </SafeAreaView>
   );
 };
 
@@ -54,7 +52,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#f8f9fa',
   },
   title: {
     fontSize: 24,
@@ -64,14 +61,9 @@ const styles = StyleSheet.create({
   },
   option: {
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
   },
   optionText: {
     fontSize: 18,
-  },
-  innercerContainer: {
-    flex: 1,
-    justifyContent: 'center',
   },
 });
 

@@ -6,6 +6,7 @@ import { AppContext } from '../context/AppContext';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenNames } from '../navigation/types';
 import doctorsData from '../data/doctors.json';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type DoctorSelectionNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -45,34 +46,31 @@ const DoctorSelectionScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.innerContainer}>
-        <List.Section>
-          <List.Subheader style={[styles.title, { color: theme.colors.primary }]}>
-            Select a Doctor
-          </List.Subheader>
-          {filteredDoctors.map((doctor) => (
-            <List.Item
-              key={doctor.id}
-              title={doctor.name}
-              description={doctor.field}
-              onPress={() => handleDoctorSelect(doctor)}
-              style={styles.option}
-              titleStyle={styles.optionTitle}
-              descriptionStyle={styles.optionSubtitle}
-              right={(props) => <List.Icon {...props} icon="chevron-right" />}
-            />
-          ))}
-          {filteredDoctors.length === 0 && (
-            <List.Item
-              title="No doctors available for the selected field."
-              titleStyle={styles.emptyText}
-            />
-          )}
-        </List.Section>
-      </View>
-
-    </View>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <List.Section>
+        <List.Subheader style={[styles.title, { color: theme.colors.primary }]}>
+          Select a Doctor
+        </List.Subheader>
+        {filteredDoctors.map((doctor) => (
+          <List.Item
+            key={doctor.id}
+            title={doctor.name}
+            description={doctor.field}
+            onPress={() => handleDoctorSelect(doctor)}
+            style={[styles.option, { borderBottomColor: theme.colors.onSurface }]}
+            titleStyle={[styles.optionTitle, { color: theme.colors.onSurface }]}
+            descriptionStyle={[styles.optionSubtitle, { color: theme.colors.onSurface }]}
+            right={(props) => <List.Icon {...props} icon="chevron-right" />}
+          />
+        ))}
+        {filteredDoctors.length === 0 && (
+          <List.Item
+            title="No doctors available for the selected field."
+            titleStyle={[styles.emptyText, { color: theme.colors.onSurface }]}
+          />
+        )}
+      </List.Section>
+    </SafeAreaView>
   );
 };
 
@@ -80,7 +78,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#f8f9fa',
   },
   title: {
     fontSize: 24,
@@ -90,7 +87,6 @@ const styles = StyleSheet.create({
   },
   option: {
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
   },
   optionTitle: {
     fontSize: 18,
@@ -98,19 +94,12 @@ const styles = StyleSheet.create({
   },
   optionSubtitle: {
     fontSize: 16,
-    color: '#555',
   },
   emptyText: {
     fontSize: 16,
-    color: '#999',
     textAlign: 'center',
     marginTop: 20,
   },
-  innerContainer: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-
 });
 
 export default DoctorSelectionScreen;

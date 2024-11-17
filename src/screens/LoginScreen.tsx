@@ -27,7 +27,7 @@ const LoginScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <Text style={[styles.title, { color: theme.colors.primary }]}>Login</Text>
       <TextInput
         label="Email"
@@ -56,6 +56,7 @@ const LoginScreen = () => {
         mode="outlined"
         onPress={handleSignUpNavigate}
         style={styles.button}
+        textColor={theme.colors.primary}
       >
         Sign Up
       </Button>
@@ -68,7 +69,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 16,
-    backgroundColor: '#f8f9fa',
   },
   title: {
     fontSize: 24,

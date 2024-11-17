@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenNames } from '../navigation/types';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type AppointmentSummaryNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -21,9 +22,11 @@ const AppointmentSummaryScreen = () => {
 
   if (!appointmentDetails || !appointmentDetails.doctor) {
     return (
-      <View style={styles.centeredContainer}>
-        <Text style={styles.emptyText}>No appointment details available.</Text>
-      </View>
+      <SafeAreaView style={[styles.centeredContainer, { backgroundColor: theme.colors.background }]}>
+        <Text style={[styles.emptyText, { color: theme.colors.onSurface }]}>
+          No appointment details available.
+        </Text>
+      </SafeAreaView>
     );
   }
 
@@ -35,23 +38,22 @@ const AppointmentSummaryScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={[styles.title, { color: theme.colors.primary }]}>
-        Appointment Confirmed
-      </Text>
-      <Text style={styles.detailText}>Doctor: {doctor.name}</Text>
-      <Text style={styles.detailText}>Field: {doctor.field}</Text>
-      <Text style={styles.detailText}>Date: {date}</Text>
-      <Text style={styles.detailText}>Time: {time}</Text>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <Text style={[styles.title, { color: theme.colors.primary }]}>Appointment Confirmed</Text>
+      <Text style={[styles.detailText, { color: theme.colors.onSurface }]}>Doctor: {doctor.name}</Text>
+      <Text style={[styles.detailText, { color: theme.colors.onSurface }]}>Field: {doctor.field}</Text>
+      <Text style={[styles.detailText, { color: theme.colors.onSurface }]}>Date: {date}</Text>
+      <Text style={[styles.detailText, { color: theme.colors.onSurface }]}>Time: {time}</Text>
       <Button
         mode="contained"
         onPress={handleNewAppointment}
         style={styles.button}
-        labelStyle={styles.buttonText}
+        buttonColor={theme.colors.primary}
+        textColor={theme.colors.onPrimary}
       >
         Book Another Appointment
       </Button>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -60,7 +62,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 16,
-    backgroundColor: '#f8f9fa',
   },
   centeredContainer: {
     flex: 1,
@@ -76,18 +77,15 @@ const styles = StyleSheet.create({
   detailText: {
     fontSize: 18,
     marginBottom: 8,
+    textAlign: 'center',
   },
   emptyText: {
     fontSize: 18,
-    color: '#999',
     textAlign: 'center',
   },
   button: {
     marginTop: 16,
     alignSelf: 'center',
-  },
-  buttonText: {
-    fontSize: 18,
   },
 });
 

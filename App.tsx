@@ -4,11 +4,12 @@ import AppNavigator from './src/navigation';
 import { registerRootComponent } from 'expo';
 import { PaperProvider } from 'react-native-paper';
 import 'reflect-metadata';
+import { theme } from './theme'
 
 
 const App = () => {
   return (
-    <PaperProvider>
+    <PaperProvider theme={theme}>
       <AppProvider>
         <AppNavigator />
       </AppProvider>

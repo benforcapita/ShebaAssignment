@@ -49,7 +49,7 @@ const SignUpScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <Text style={[styles.title, { color: theme.colors.primary }]}>Sign Up</Text>
       <TextInput
         label="Name"
@@ -75,7 +75,8 @@ const SignUpScreen = () => {
       <Button
         mode="contained"
         onPress={handleSignUp}
-        style={styles.button}
+        style={[styles.button, { backgroundColor: theme.colors.primary }]}
+        textColor={theme.colors.onPrimary}
       >
         Sign Up
       </Button>
@@ -83,6 +84,7 @@ const SignUpScreen = () => {
         mode="text"
         onPress={() => navigation.navigate(ScreenNames.LoginScreen)}
         style={styles.linkButton}
+        textColor={theme.colors.primary}
       >
         Already have an account? Log In
       </Button>
@@ -95,7 +97,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 16,
-    backgroundColor: '#f8f9fa',
   },
   title: {
     fontSize: 24,

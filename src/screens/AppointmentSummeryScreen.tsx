@@ -1,15 +1,17 @@
 import React, { useContext } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { Text, Button, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
-import { RootStackParamList, ScreenNames } from '../navigation/types';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList, ScreenNames } from '../navigation/types';
 
 type AppointmentSummaryNavigationProp = StackNavigationProp<RootStackParamList>;
 
 const AppointmentSummaryScreen = () => {
   const navigation = useNavigation<AppointmentSummaryNavigationProp>();
   const context = useContext(AppContext);
+  const theme = useTheme();
 
   if (!context) {
     throw new Error('AppContext is undefined. Ensure you are within an AppProvider.');
@@ -34,14 +36,21 @@ const AppointmentSummaryScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Appointment Confirmed</Text>
+      <Text style={[styles.title, { color: theme.colors.primary }]}>
+        Appointment Confirmed
+      </Text>
       <Text style={styles.detailText}>Doctor: {doctor.name}</Text>
       <Text style={styles.detailText}>Field: {doctor.field}</Text>
       <Text style={styles.detailText}>Date: {date}</Text>
       <Text style={styles.detailText}>Time: {time}</Text>
-      <TouchableOpacity style={styles.button} onPress={handleNewAppointment}>
-        <Text style={styles.buttonText}>Book Another Appointment</Text>
-      </TouchableOpacity>
+      <Button
+        mode="contained"
+        onPress={handleNewAppointment}
+        style={styles.button}
+        labelStyle={styles.buttonText}
+      >
+        Book Another Appointment
+      </Button>
     </View>
   );
 };
@@ -51,6 +60,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 16,
+    backgroundColor: '#f8f9fa',
   },
   centeredContainer: {
     flex: 1,
@@ -73,14 +83,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   button: {
-    backgroundColor: '#007BFF',
-    padding: 16,
-    borderRadius: 8,
     marginTop: 16,
-    alignItems: 'center',
+    alignSelf: 'center',
   },
   buttonText: {
-    color: '#FFFFFF',
     fontSize: 18,
   },
 });

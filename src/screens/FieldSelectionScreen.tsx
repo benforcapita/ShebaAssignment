@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { List, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
-import { RootStackParamList, ScreenNames } from '../navigation/types';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList, ScreenNames } from '../navigation/types';
 
 type FieldSelectionNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -12,6 +13,7 @@ const fields = ['Orthopedics', 'Cardiology', 'Neurology', 'Pediatrics', 'Dermato
 const FieldSelectionScreen = () => {
   const navigation = useNavigation<FieldSelectionNavigationProp>();
   const context = useContext(AppContext);
+  const theme = useTheme();
 
   if (!context) {
     throw new Error('AppContext is undefined. Ensure you are within an AppProvider.');
@@ -26,19 +28,24 @@ const FieldSelectionScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Select a Medical Field</Text>
-      <FlatList
-        data={fields}
-        keyExtractor={(item) => item}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.option}
-            onPress={() => handleFieldSelect(item)}
-          >
-            <Text style={styles.optionText}>{item}</Text>
-          </TouchableOpacity>
-        )}
-      />
+      <View style={styles.innercerContainer}>
+        <List.Section>
+          <List.Subheader style={[styles.title, { color: theme.colors.primary }]}>
+            Select a Medical Field
+          </List.Subheader>
+          {fields.map((field) => (
+            <List.Item
+              key={field}
+              title={field}
+              onPress={() => handleFieldSelect(field)}
+              style={styles.option}
+              titleStyle={styles.optionText}
+              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+            />
+          ))}
+        </List.Section>
+      </View>
+
     </View>
   );
 };
@@ -46,8 +53,8 @@ const FieldSelectionScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     padding: 16,
+    backgroundColor: '#f8f9fa',
   },
   title: {
     fontSize: 24,
@@ -56,14 +63,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   option: {
-    padding: 16,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    marginBottom: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
   optionText: {
     fontSize: 18,
+  },
+  innercerContainer: {
+    flex: 1,
+    justifyContent: 'center',
   },
 });
 

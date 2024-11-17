@@ -1,15 +1,17 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
+import { Text, Button, Chip, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
-import { RootStackParamList, ScreenNames } from '../navigation/types';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList, ScreenNames } from '../navigation/types';
 
 type TimeSlotScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
 const TimeSlotSelectionScreen = () => {
   const navigation = useNavigation<TimeSlotScreenNavigationProp>();
   const context = useContext(AppContext);
+  const theme = useTheme();
 
   if (!context) {
     throw new Error('AppContext is undefined. Ensure you are within an AppProvider.');
@@ -50,52 +52,44 @@ const TimeSlotSelectionScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Select Date and Time</Text>
+      <Text style={[styles.title, { color: theme.colors.primary }]}>Select Date and Time</Text>
       <Text style={styles.subtitle}>Available Dates:</Text>
-      <FlatList
-        data={selectedDoctor.availableDates}
-        keyExtractor={(item) => item}
-        horizontal
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={[
-              styles.option,
-              selectedDate === item && styles.selectedOption,
-            ]}
-            onPress={() => handleDateSelect(item)}
+      <View style={styles.chipContainer}>
+        {selectedDoctor.availableDates.map((date) => (
+          <Chip
+            key={date}
+            selected={selectedDate === date}
+            onPress={() => handleDateSelect(date)}
+            style={styles.chip}
           >
-            <Text style={[styles.optionText, selectedDate === item && styles.selectedOptionText]}>
-              {item}
-            </Text>
-          </TouchableOpacity>
-        )}
-      />
+            {date}
+          </Chip>
+        ))}
+      </View>
       {selectedDate && (
         <>
           <Text style={styles.subtitle}>Available Times:</Text>
-          <FlatList
-            data={selectedDoctor.timeSlots}
-            keyExtractor={(item) => item}
-            horizontal
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={[
-                  styles.option,
-                  selectedTime === item && styles.selectedOption,
-                ]}
-                onPress={() => handleTimeSelect(item)}
+          <View style={styles.chipContainer}>
+            {selectedDoctor.timeSlots.map((time) => (
+              <Chip
+                key={time}
+                selected={selectedTime === time}
+                onPress={() => handleTimeSelect(time)}
+                style={styles.chip}
               >
-                <Text style={[styles.optionText, selectedTime === item && styles.selectedOptionText]}>
-                  {item}
-                </Text>
-              </TouchableOpacity>
-            )}
-          />
+                {time}
+              </Chip>
+            ))}
+          </View>
         </>
       )}
-      <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm}>
-        <Text style={styles.confirmButtonText}>Confirm Appointment</Text>
-      </TouchableOpacity>
+      <Button
+        mode="contained"
+        onPress={handleConfirm}
+        style={styles.confirmButton}
+      >
+        Confirm Appointment
+      </Button>
     </View>
   );
 };
@@ -104,6 +98,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: '#f8f9fa',
   },
   title: {
     fontSize: 24,
@@ -114,33 +109,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 8,
   },
-  option: {
-    padding: 16,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
+  chipContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: 16,
+  },
+  chip: {
     marginRight: 8,
-  },
-  selectedOption: {
-    backgroundColor: '#007BFF',
-    borderColor: '#0056b3',
-  },
-  optionText: {
-    fontSize: 16,
-  },
-  selectedOptionText: {
-    color: '#fff',
+    marginBottom: 8,
   },
   confirmButton: {
-    backgroundColor: '#28a745',
-    padding: 16,
-    borderRadius: 8,
     marginTop: 16,
-    alignItems: 'center',
-  },
-  confirmButtonText: {
-    color: '#fff',
-    fontSize: 18,
   },
 });
 

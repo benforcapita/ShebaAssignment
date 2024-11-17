@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
+import { TextInput, Button, Text, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import { RootStackParamList, ScreenNames } from '../navigation/types';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList, ScreenNames } from '../navigation/types';
 
 type OTPScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
 const OTPScreen = () => {
   const [otp, setOtp] = useState('');
   const navigation = useNavigation<OTPScreenNavigationProp>();
+  const theme = useTheme();
 
   const handleVerifyOTP = () => {
     if (otp.length === 5) {
@@ -21,19 +23,23 @@ const OTPScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Enter OTP</Text>
+      <Text style={[styles.title, { color: theme.colors.primary }]}>Enter OTP</Text>
       <TextInput
-        style={styles.input}
-        placeholder="Enter 5-digit OTP"
+        label="5-digit OTP"
         value={otp}
         onChangeText={setOtp}
         keyboardType="numeric"
         maxLength={5}
         autoFocus
+        style={styles.input}
       />
-      <TouchableOpacity style={styles.button} onPress={handleVerifyOTP}>
-        <Text style={styles.buttonText}>Verify OTP</Text>
-      </TouchableOpacity>
+      <Button
+        mode="contained"
+        onPress={handleVerifyOTP}
+        style={styles.button}
+      >
+        Verify OTP
+      </Button>
     </View>
   );
 };
@@ -43,30 +49,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 16,
+    backgroundColor: '#f8f9fa',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 16,
+    marginBottom: 24,
     textAlign: 'center',
   },
   input: {
-    borderColor: 'gray',
-    borderWidth: 1,
-    padding: 8,
     marginBottom: 16,
-    textAlign: 'center',
-    fontSize: 18,
   },
   button: {
-    backgroundColor: '#007BFF',
-    padding: 12,
-    borderRadius: 4,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
+    marginTop: 8,
   },
 });
 

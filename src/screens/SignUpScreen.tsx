@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, TextInput, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
+import { TextInput, Button, Text, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import * as FileSystem from 'expo-file-system';
-import { RootStackParamList, ScreenNames } from '../navigation/types';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList, ScreenNames } from '../navigation/types';
 
 type SignUpScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -12,6 +13,7 @@ const SignUpScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation<SignUpScreenNavigationProp>();
+  const theme = useTheme();
 
   const handleSignUp = async () => {
     if (!name || !email || !password) {
@@ -48,34 +50,42 @@ const SignUpScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
+      <Text style={[styles.title, { color: theme.colors.primary }]}>Sign Up</Text>
       <TextInput
-        style={styles.input}
-        placeholder="Name"
+        label="Name"
         value={name}
         onChangeText={setName}
+        style={styles.input}
       />
       <TextInput
-        style={styles.input}
-        placeholder="Email"
+        label="Email"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
         autoCapitalize="none"
+        style={styles.input}
       />
       <TextInput
-        style={styles.input}
-        placeholder="Password"
+        label="Password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
+        style={styles.input}
       />
-      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-        <Text style={styles.buttonText}>Sign Up</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.linkContainer} onPress={() => navigation.navigate(ScreenNames.LoginScreen)}>
-        <Text style={styles.linkText}>Already have an account? Log In</Text>
-      </TouchableOpacity>
+      <Button
+        mode="contained"
+        onPress={handleSignUp}
+        style={styles.button}
+      >
+        Sign Up
+      </Button>
+      <Button
+        mode="text"
+        onPress={() => navigation.navigate(ScreenNames.LoginScreen)}
+        style={styles.linkButton}
+      >
+        Already have an account? Log In
+      </Button>
     </View>
   );
 };
@@ -85,35 +95,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 16,
+    backgroundColor: '#f8f9fa',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 16,
+    marginBottom: 24,
     textAlign: 'center',
   },
   input: {
-    borderColor: 'gray',
-    borderWidth: 1,
-    padding: 8,
     marginBottom: 16,
   },
   button: {
-    backgroundColor: '#007BFF',
-    padding: 12,
-    borderRadius: 4,
-    alignItems: 'center',
+    marginTop: 8,
   },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-  },
-  linkContainer: {
+  linkButton: {
     marginTop: 16,
-  },
-  linkText: {
-    color: '#007BFF',
-    textAlign: 'center',
   },
 });
 

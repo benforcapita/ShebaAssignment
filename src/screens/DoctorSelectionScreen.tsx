@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
+import { List, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
-import { RootStackParamList, ScreenNames } from '../navigation/types';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList, ScreenNames } from '../navigation/types';
 import doctorsData from '../data/doctors.json';
 
 type DoctorSelectionNavigationProp = StackNavigationProp<RootStackParamList>;
@@ -19,6 +20,7 @@ interface Doctor {
 const DoctorSelectionScreen = () => {
   const navigation = useNavigation<DoctorSelectionNavigationProp>();
   const context = useContext(AppContext);
+  const theme = useTheme();
 
   if (!context) {
     throw new Error('AppContext is undefined. Ensure you are within an AppProvider.');
@@ -44,23 +46,32 @@ const DoctorSelectionScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Select a Doctor</Text>
-      <FlatList
-        data={filteredDoctors}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.option}
-            onPress={() => handleDoctorSelect(item)}
-          >
-            <Text style={styles.optionTitle}>{item.name}</Text>
-            <Text style={styles.optionSubtitle}>{item.field}</Text>
-          </TouchableOpacity>
-        )}
-        ListEmptyComponent={
-          <Text style={styles.emptyText}>No doctors available for the selected field.</Text>
-        }
-      />
+      <View style={styles.innerContainer}>
+        <List.Section>
+          <List.Subheader style={[styles.title, { color: theme.colors.primary }]}>
+            Select a Doctor
+          </List.Subheader>
+          {filteredDoctors.map((doctor) => (
+            <List.Item
+              key={doctor.id}
+              title={doctor.name}
+              description={doctor.field}
+              onPress={() => handleDoctorSelect(doctor)}
+              style={styles.option}
+              titleStyle={styles.optionTitle}
+              descriptionStyle={styles.optionSubtitle}
+              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+            />
+          ))}
+          {filteredDoctors.length === 0 && (
+            <List.Item
+              title="No doctors available for the selected field."
+              titleStyle={styles.emptyText}
+            />
+          )}
+        </List.Section>
+      </View>
+
     </View>
   );
 };
@@ -69,6 +80,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: '#f8f9fa',
   },
   title: {
     fontSize: 24,
@@ -77,11 +89,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   option: {
-    padding: 16,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    marginBottom: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
   optionTitle: {
     fontSize: 18,
@@ -97,6 +106,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
   },
+  innerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+
 });
 
 export default DoctorSelectionScreen;

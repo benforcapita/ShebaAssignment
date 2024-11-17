@@ -1,15 +1,6 @@
 import React, { useState } from 'react';
-import {
-  TextInput,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  Keyboard,
-  Alert,
-} from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
+import { TextInput, Button, Text, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenNames } from '../navigation/types';
@@ -20,6 +11,7 @@ const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation<LoginScreenNavigationProp>();
+  const theme = useTheme();
 
   const handleLogin = () => {
     if (!email || !password) {
@@ -31,45 +23,43 @@ const LoginScreen = () => {
   };
 
   const handleSignUpNavigate = () => {
-    navigation.navigate(ScreenNames.SignUpScreen); // Navigate to Sign Up screen
+    navigation.navigate(ScreenNames.SignUpScreen);
   };
 
   return (
-    <Pressable onPress={Keyboard.dismiss} style={{ flex: 1 }}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.container}
+    <View style={styles.container}>
+      <Text style={[styles.title, { color: theme.colors.primary }]}>Login</Text>
+      <TextInput
+        label="Email"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        style={styles.input}
+      />
+      <TextInput
+        label="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+        autoCapitalize="none"
+        style={styles.input}
+      />
+      <Button
+        mode="contained"
+        onPress={handleLogin}
+        style={styles.button}
       >
-        <Text style={styles.title}>Login</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoComplete="email"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          autoCapitalize="none"
-          autoComplete="password"
-        />
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.button, styles.signUpButton]}
-          onPress={handleSignUpNavigate}
-        >
-          <Text style={styles.buttonText}>Sign Up</Text>
-        </TouchableOpacity>
-      </KeyboardAvoidingView>
-    </Pressable>
+        Login
+      </Button>
+      <Button
+        mode="outlined"
+        onPress={handleSignUpNavigate}
+        style={styles.button}
+      >
+        Sign Up
+      </Button>
+    </View>
   );
 };
 
@@ -85,31 +75,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 24,
     textAlign: 'center',
-    color: '#212529',
   },
   input: {
-    borderColor: '#ccc',
-    borderWidth: 1,
-    padding: 12,
     marginBottom: 16,
-    borderRadius: 8,
-    fontSize: 16,
-    backgroundColor: '#ffffff',
   },
   button: {
-    backgroundColor: '#007BFF',
-    padding: 16,
-    borderRadius: 8,
-    alignItems: 'center',
     marginTop: 8,
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  signUpButton: {
-    backgroundColor: '#6c757d', // Grey color for differentiation
   },
 });
 

@@ -1,38 +1,70 @@
-// src/screens/FieldSelectionScreen.tsx
 import React, { useContext } from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
-import tw from 'nativewind';
+import { RootStackParamList, ScreenNames } from '../navigation/types';
+import { StackNavigationProp } from '@react-navigation/stack';
+
+type FieldSelectionNavigationProp = StackNavigationProp<RootStackParamList>;
 
 const fields = ['Orthopedics', 'Cardiology', 'Neurology', 'Pediatrics', 'Dermatology'];
 
 const FieldSelectionScreen = () => {
-  const navigation = useNavigation();
-  const { setSelectedField } = useContext(AppContext);
+  const navigation = useNavigation<FieldSelectionNavigationProp>();
+  const context = useContext(AppContext);
+
+  if (!context) {
+    throw new Error('AppContext is undefined. Ensure you are within an AppProvider.');
+  }
+
+  const { setSelectedField } = context;
 
   const handleFieldSelect = (field: string) => {
     setSelectedField(field);
-    navigation.navigate('DoctorSelectionScreen');
+    navigation.navigate(ScreenNames.DoctorSelectionScreen);
   };
 
   return (
-    <View style={tw`flex-1 justify-center px-4`}>
-      <Text style={tw`text-2xl font-bold mb-4`}>Select a Medical Field</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Select a Medical Field</Text>
       <FlatList
         data={fields}
         keyExtractor={(item) => item}
         renderItem={({ item }) => (
           <TouchableOpacity
-            style={tw`p-4 mb-2 border rounded`}
+            style={styles.option}
             onPress={() => handleFieldSelect(item)}
           >
-            <Text style={tw`text-lg`}>{item}</Text>
+            <Text style={styles.optionText}>{item}</Text>
           </TouchableOpacity>
         )}
       />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 16,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+  option: {
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  optionText: {
+    fontSize: 18,
+  },
+});
 
 export default FieldSelectionScreen;

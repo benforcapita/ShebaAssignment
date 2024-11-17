@@ -8,6 +8,7 @@ import FieldSelectionScreen from '../screens/FieldSelectionScreen';
 import DoctorSelectionScreen from '../screens/DoctorSelectionScreen';
 import TimeSlotSelectionScreen from '../screens/TimeSlotSelectionScreen';
 import AppointmentSummaryScreen from '../screens/AppointmentSummeryScreen';
+import SignUpScreen from '../screens/SignUpScreen';
 
 const Stack = createStackNavigator();
 
@@ -16,6 +17,7 @@ const AppNavigator = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="LoginScreen">
         <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="SignUpScreen" component={SignUpScreen} options={{ headerShown: false }} />
         <Stack.Screen name="OTPScreen" component={OTPScreen} options={{ headerShown: false }} />
         <Stack.Screen name="FieldSelectionScreen" component={FieldSelectionScreen} options={{ headerShown: false }} />
         <Stack.Screen name="DoctorSelectionScreen" component={DoctorSelectionScreen} options={{ headerShown: false }} />

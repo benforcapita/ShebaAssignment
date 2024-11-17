@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "name": "Dr. John Doe",
+    "field": "Orthopedics",
+    "availableDates": [
+      "2024-11-20",
+      "2024-11-21"
+    ],
+    "timeSlots": [
+      "10:00 AM",
+      "2:00 PM"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Dr. Jane Smith",
+    "field": "Cardiology",
+    "availableDates": [
+      "2024-11-22"
+    ],
+    "timeSlots": [
+      "9:00 AM",
+      "1:00 PM"
+    ]
+  }
+]

@@ -5,6 +5,7 @@ export enum ScreenNames {
   DoctorSelectionScreen = 'DoctorSelectionScreen',
   TimeSlotSelectionScreen = 'TimeSlotSelectionScreen',
   AppointmentSummaryScreen = 'AppointmentSummaryScreen',
+  SignUpScreen = 'SignUpScreen',
 }
 
 export type RootStackParamList = {
@@ -14,4 +15,5 @@ export type RootStackParamList = {
   [ScreenNames.DoctorSelectionScreen]: undefined;
   [ScreenNames.TimeSlotSelectionScreen]: undefined;
   [ScreenNames.AppointmentSummaryScreen]: undefined;
+  [ScreenNames.SignUpScreen]: undefined;
 }

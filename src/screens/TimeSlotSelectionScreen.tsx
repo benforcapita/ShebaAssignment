@@ -1,15 +1,30 @@
-// src/screens/TimeSlotSelectionScreen.tsx
 import React, { useContext, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
-import tw from 'nativewind';
+import { RootStackParamList, ScreenNames } from '../navigation/types';
+import { StackNavigationProp } from '@react-navigation/stack';
+
+type TimeSlotScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
 const TimeSlotSelectionScreen = () => {
-  const navigation = useNavigation();
-  const { selectedDoctor, setAppointmentDetails } = useContext(AppContext);
+  const navigation = useNavigation<TimeSlotScreenNavigationProp>();
+  const context = useContext(AppContext);
+
+  if (!context) {
+    throw new Error('AppContext is undefined. Ensure you are within an AppProvider.');
+  }
+
+  const { selectedDoctor, setAppointmentDetails } = context;
+
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
+
+  if (!selectedDoctor) {
+    Alert.alert('Error', 'No doctor selected. Returning to Doctor Selection.');
+    navigation.navigate(ScreenNames.DoctorSelectionScreen);
+    return null;
+  }
 
   const handleDateSelect = (date: string) => {
     setSelectedDate(date);
@@ -27,16 +42,16 @@ const TimeSlotSelectionScreen = () => {
         date: selectedDate,
         time: selectedTime,
       });
-      navigation.navigate('AppointmentSummaryScreen');
+      navigation.navigate(ScreenNames.AppointmentSummaryScreen);
     } else {
-      alert('Please select both a date and time.');
+      Alert.alert('Error', 'Please select both a date and time.');
     }
   };
 
   return (
-    <View style={tw`flex-1 p-4`}>
-      <Text style={tw`text-2xl font-bold mb-4`}>Select Date and Time</Text>
-      <Text style={tw`text-lg mb-2`}>Available Dates:</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Select Date and Time</Text>
+      <Text style={styles.subtitle}>Available Dates:</Text>
       <FlatList
         data={selectedDoctor.availableDates}
         keyExtractor={(item) => item}
@@ -44,17 +59,12 @@ const TimeSlotSelectionScreen = () => {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={[
-              tw`p-4 mr-2 border rounded`,
-              item === selectedDate && tw`bg-blue-500`,
+              styles.option,
+              selectedDate === item && styles.selectedOption,
             ]}
             onPress={() => handleDateSelect(item)}
           >
-            <Text
-              style={[
-                tw`text-lg`,
-                item === selectedDate && tw`text-white`,
-              ]}
-            >
+            <Text style={[styles.optionText, selectedDate === item && styles.selectedOptionText]}>
               {item}
             </Text>
           </TouchableOpacity>
@@ -62,7 +72,7 @@ const TimeSlotSelectionScreen = () => {
       />
       {selectedDate && (
         <>
-          <Text style={tw`text-lg mt-4 mb-2`}>Available Times:</Text>
+          <Text style={styles.subtitle}>Available Times:</Text>
           <FlatList
             data={selectedDoctor.timeSlots}
             keyExtractor={(item) => item}
@@ -70,17 +80,12 @@ const TimeSlotSelectionScreen = () => {
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={[
-                  tw`p-4 mr-2 border rounded`,
-                  item === selectedTime && tw`bg-blue-500`,
+                  styles.option,
+                  selectedTime === item && styles.selectedOption,
                 ]}
                 onPress={() => handleTimeSelect(item)}
               >
-                <Text
-                  style={[
-                    tw`text-lg`,
-                    item === selectedTime && tw`text-white`,
-                  ]}
-                >
+                <Text style={[styles.optionText, selectedTime === item && styles.selectedOptionText]}>
                   {item}
                 </Text>
               </TouchableOpacity>
@@ -88,14 +93,55 @@ const TimeSlotSelectionScreen = () => {
           />
         </>
       )}
-      <TouchableOpacity
-        style={tw`bg-green-500 p-4 mt-4 rounded`}
-        onPress={handleConfirm}
-      >
-        <Text style={tw`text-white text-center text-lg`}>Confirm Appointment</Text>
+      <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm}>
+        <Text style={styles.confirmButtonText}>Confirm Appointment</Text>
       </TouchableOpacity>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  subtitle: {
+    fontSize: 18,
+    marginBottom: 8,
+  },
+  option: {
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    marginRight: 8,
+  },
+  selectedOption: {
+    backgroundColor: '#007BFF',
+    borderColor: '#0056b3',
+  },
+  optionText: {
+    fontSize: 16,
+  },
+  selectedOptionText: {
+    color: '#fff',
+  },
+  confirmButton: {
+    backgroundColor: '#28a745',
+    padding: 16,
+    borderRadius: 8,
+    marginTop: 16,
+    alignItems: 'center',
+  },
+  confirmButtonText: {
+    color: '#fff',
+    fontSize: 18,
+  },
+});
 
 export default TimeSlotSelectionScreen;

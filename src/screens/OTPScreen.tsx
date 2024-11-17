@@ -1,38 +1,73 @@
-// src/screens/FieldSelectionScreen.tsx
-import React, { useContext } from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { AppContext } from '../context/AppContext';
-import tw from 'nativewind';
+import { RootStackParamList, ScreenNames } from '../navigation/types';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-const fields = ['Orthopedics', 'Cardiology', 'Neurology', 'Pediatrics', 'Dermatology'];
+type OTPScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
-const FieldSelectionScreen = () => {
-  const navigation = useNavigation();
-  const { setSelectedField } = useContext(AppContext);
+const OTPScreen = () => {
+  const [otp, setOtp] = useState('');
+  const navigation = useNavigation<OTPScreenNavigationProp>();
 
-  const handleFieldSelect = (field: string) => {
-    setSelectedField(field);
-    navigation.navigate('DoctorSelectionScreen');
+  const handleVerifyOTP = () => {
+    if (otp.length === 5) {
+      Alert.alert('Success', 'OTP Verified');
+      navigation.navigate(ScreenNames.FieldSelectionScreen);
+    } else {
+      Alert.alert('Error', 'Please enter a 5-digit OTP');
+    }
   };
 
   return (
-    <View style={tw`flex-1 justify-center px-4`}>
-      <Text style={tw`text-2xl font-bold mb-4`}>Select a Medical Field</Text>
-      <FlatList
-        data={fields}
-        keyExtractor={(item) => item}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={tw`p-4 mb-2 border rounded`}
-            onPress={() => handleFieldSelect(item)}
-          >
-            <Text style={tw`text-lg`}>{item}</Text>
-          </TouchableOpacity>
-        )}
+    <View style={styles.container}>
+      <Text style={styles.title}>Enter OTP</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter 5-digit OTP"
+        value={otp}
+        onChangeText={setOtp}
+        keyboardType="numeric"
+        maxLength={5}
+        autoFocus
       />
+      <TouchableOpacity style={styles.button} onPress={handleVerifyOTP}>
+        <Text style={styles.buttonText}>Verify OTP</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
-export default FieldSelectionScreen;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 16,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+  input: {
+    borderColor: 'gray',
+    borderWidth: 1,
+    padding: 8,
+    marginBottom: 16,
+    textAlign: 'center',
+    fontSize: 18,
+  },
+  button: {
+    backgroundColor: '#007BFF',
+    padding: 12,
+    borderRadius: 4,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+  },
+});
+
+export default OTPScreen;

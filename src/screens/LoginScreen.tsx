@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
-import { TextInput, Button, Text, useTheme } from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
+import { TextInput, Text, useTheme, Dialog, Portal, Button as PaperButton } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenNames } from '../navigation/types';
@@ -13,6 +13,9 @@ type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [visible, setVisible] = useState(false);
+  const [dialogTitle, setDialogTitle] = useState('');
+  const [dialogContent, setDialogContent] = useState('');
   const navigation = useNavigation<LoginScreenNavigationProp>();
   const theme = useTheme();
 
@@ -35,17 +38,25 @@ const LoginScreen = () => {
     return user.password === hashedInputPassword;
   };
 
+  const showDialog = (title: string, content: string) => {
+    setDialogTitle(title);
+    setDialogContent(content);
+    setVisible(true);
+  };
+
+  const hideDialog = () => setVisible(false);
+
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('Error', 'Please enter both email and password.');
+      showDialog('Error', 'Please enter both email and password.');
       return;
     }
     const isValidUser = await validateUser(email, password);
     if (isValidUser) {
-      Alert.alert('Success', 'Login successful!');
+      showDialog('Success', 'Login successful!');
       navigation.navigate(ScreenNames.OTPScreen);
     } else {
-      Alert.alert('Error', 'Invalid email or password.');
+      showDialog('Error', 'Invalid email or password.');
     }
   };
 
@@ -86,6 +97,17 @@ const LoginScreen = () => {
         color={theme.colors.primary}
         textColor={theme.colors.onPrimary}
       />
+      <Portal>
+        <Dialog visible={visible} onDismiss={hideDialog}>
+          <Dialog.Title>{dialogTitle}</Dialog.Title>
+          <Dialog.Content>
+            <Text>{dialogContent}</Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <PaperButton onPress={hideDialog}>OK</PaperButton>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </View>
   );
 };

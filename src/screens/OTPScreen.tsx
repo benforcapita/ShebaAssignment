@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
-import { TextInput, Button, Text, useTheme } from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
+import { TextInput, Button as PaperButton, Text, useTheme, Dialog, Portal } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenNames } from '../navigation/types';
@@ -11,13 +11,24 @@ const OTPScreen = () => {
   const [otp, setOtp] = useState('');
   const navigation = useNavigation<OTPScreenNavigationProp>();
   const theme = useTheme();
+  const [visible, setVisible] = useState(false);
+  const [dialogTitle, setDialogTitle] = useState('');
+  const [dialogContent, setDialogContent] = useState('');
+
+  const showDialog = (title: string, content: string) => {
+    setDialogTitle(title);
+    setDialogContent(content);
+    setVisible(true);
+  };
+
+  const hideDialog = () => setVisible(false);
 
   const handleVerifyOTP = () => {
     if (otp.length === 5) {
-      Alert.alert('Success', 'OTP Verified');
+      showDialog('Success', 'OTP Verified');
       navigation.navigate(ScreenNames.UserAppointmentsScreen);
     } else {
-      Alert.alert('Error', 'Please enter a 5-digit OTP');
+      showDialog('Error', 'Please enter a 5-digit OTP');
     }
   };
 
@@ -33,14 +44,25 @@ const OTPScreen = () => {
         autoFocus
         style={styles.input}
       />
-      <Button
+      <PaperButton
         mode="contained"
         onPress={handleVerifyOTP}
         style={[styles.button, { backgroundColor: theme.colors.primary }]}
         textColor={theme.colors.onPrimary}
       >
         Verify OTP
-      </Button>
+      </PaperButton>
+      <Portal>
+        <Dialog visible={visible} onDismiss={hideDialog}>
+          <Dialog.Title>{dialogTitle}</Dialog.Title>
+          <Dialog.Content>
+            <Text>{dialogContent}</Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <PaperButton onPress={hideDialog}>OK</PaperButton>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </View>
   );
 };

@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
-import { View, StyleSheet,Alert } from 'react-native';
-import { Text, Button, useTheme } from 'react-native-paper';
+import React, { useContext, useState } from 'react';
+import { View, StyleSheet, } from 'react-native';
+import { Text, Button as PaperButton, useTheme, Dialog, Portal } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -20,6 +20,7 @@ const AppointmentSummaryScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const context = useContext(AppContext);
   const theme = useTheme();
+  const [visible, setVisible] = useState(false);
 
   if (!context) {
     throw new Error('AppContext is undefined. Ensure you are within an AppProvider.');
@@ -66,17 +67,13 @@ const AppointmentSummaryScreen = () => {
       await fs.writeAsStringAsync(fileUri, JSON.stringify(appointments, null, 2), { encoding: fs.EncodingType.UTF8 });
       console.log('Appointment saved successfully!');
 
-      Alert.alert(
-        'Success',
-        'Appointment saved successfully!',
-        [
-          { text: 'OK', onPress: () => navigation.navigate(ScreenNames.UserAppointmentsScreen) }
-        ]
-      );
+      setVisible(true);
     } catch (error) {
       console.error('Error saving appointment:', error);
     }
   };
+
+  const hideDialog = () => setVisible(false);
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>  
@@ -85,7 +82,7 @@ const AppointmentSummaryScreen = () => {
       <Text style={[styles.detailText, { color: theme.colors.onSurface }]}>Field: {doctor.field}</Text>
       <Text style={[styles.detailText, { color: theme.colors.onSurface }]}>Date: {date}</Text>
       <Text style={[styles.detailText, { color: theme.colors.onSurface }]}>Time: {time}</Text>
-      <Button
+      <PaperButton
         mode="contained"
         onPress={handleNewAppointment}
         style={styles.button}
@@ -93,8 +90,8 @@ const AppointmentSummaryScreen = () => {
         textColor={theme.colors.onPrimary}
       >
         Back to Main Menu
-      </Button>
-      <Button
+      </PaperButton>
+      <PaperButton
         mode="contained"
         onPress={saveAppointmentToFile}
         style={styles.button}
@@ -102,7 +99,18 @@ const AppointmentSummaryScreen = () => {
         textColor={theme.colors.onPrimary}
       >
         Save Appointment
-      </Button>
+      </PaperButton>
+      <Portal>
+        <Dialog visible={visible} onDismiss={hideDialog}>
+          <Dialog.Title>Success</Dialog.Title>
+          <Dialog.Content>
+            <Text>Appointment saved successfully!</Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <PaperButton onPress={() => { hideDialog(); navigation.navigate(ScreenNames.UserAppointmentsScreen) }}>OK</PaperButton>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </SafeAreaView>
   );
 };

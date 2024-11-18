@@ -33,6 +33,7 @@ const DoctorSearch: React.FC<DoctorSearchProps> = ({ doctorsData, onSelectDoctor
         value={doctorName}
         onChangeText={setDoctorName}
         style={{ marginBottom: 16 }}
+        mode='view'
       />
       {filteredDoctors.length > 0 && (
         <FlatList

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Alert, TouchableOpacity } from 'react-native';
-import { Text, Button, useTheme, List, Divider } from 'react-native-paper';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, Button as PaperButton, useTheme, List, Divider, Dialog, Portal } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -14,6 +14,10 @@ const UserAppointmentsScreen = () => {
   const context = useContext(AppContext);
   const theme = useTheme();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [visible, setVisible] = useState(false);
+  const [dialogTitle, setDialogTitle] = useState('');
+  const [dialogContent, setDialogContent] = useState('');
+  const [appointmentId, setAppointmentId] = useState('');
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -48,16 +52,18 @@ const UserAppointmentsScreen = () => {
   };
 
   const confirmDelete = (id: string) => {
-    Alert.alert(
-      'Cancel Appointment',
-      'Do you want to cancel this appointment?',
-      [
-        { text: 'No', style: 'cancel' },
-        { text: 'Yes', onPress: () => deleteAppointment(id) },
-      ],
-      { cancelable: true }
-    );
+    setDialogTitle('Cancel Appointment');
+    setDialogContent('Do you want to cancel this appointment?');
+    setAppointmentId(id);
+    setVisible(true);
   };
+
+  const handleDelete = () => {
+    deleteAppointment(appointmentId);
+    setVisible(false);
+  };
+
+  const hideDialog = () => setVisible(false);
 
   const renderItem = ({ item }: { item: Appointment }) => {
     return (
@@ -75,14 +81,14 @@ const UserAppointmentsScreen = () => {
     return (
       <SafeAreaView style={styles.centeredContainer}>
         <Text style={styles.emptyText}>No appointments available.</Text>
-        <Button
+        <PaperButton
           mode="contained"
           onPress={() => navigation.navigate(ScreenNames.FieldSelectionScreen)}
           style={styles.button}
           labelStyle={styles.buttonText}
         >
           Book New Appointment
-        </Button>
+        </PaperButton>
       </SafeAreaView>
     );
   }
@@ -98,14 +104,26 @@ const UserAppointmentsScreen = () => {
           </React.Fragment>
         ))}
       </List.Section>
-      <Button
+      <PaperButton
         mode="contained"
         onPress={() => navigation.navigate(ScreenNames.FieldSelectionScreen)}
         style={styles.button}
         labelStyle={styles.buttonText}
       >
         Book New Appointment
-      </Button>
+      </PaperButton>
+      <Portal>
+        <Dialog visible={visible} onDismiss={hideDialog}>
+          <Dialog.Title>{dialogTitle}</Dialog.Title>
+          <Dialog.Content>
+            <Text>{dialogContent}</Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <PaperButton onPress={hideDialog}>No</PaperButton>
+            <PaperButton onPress={handleDelete}>Yes</PaperButton>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </SafeAreaView>
   );
 };

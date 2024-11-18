@@ -8,6 +8,7 @@ export interface Doctor {
 export interface User {
   id: number;
   name: string;
+  password: string;
   appointments: Appointment[];
 }
 export interface Appointment {

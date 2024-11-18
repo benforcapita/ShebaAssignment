@@ -7,11 +7,33 @@ import { RootStackParamList, ScreenNames } from '../navigation/types';
 
 type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
+interface LoginPageButtonProps {
+  mode: 'text' | 'outlined' | 'contained';
+  onPress: () => void;
+  text: string;
+  color?: string;
+  textColor?: string;
+}
+
+const LoginPageButton: React.FC<LoginPageButtonProps> = ({ mode, onPress, text, color, textColor }) => {
+  return (
+    <Button
+      mode={mode}
+      onPress={onPress}
+      style={styles.button}
+      buttonColor={color}
+      textColor={textColor}
+    >
+      {text}
+    </Button>
+  );
+};
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation<LoginScreenNavigationProp>();
   const theme = useTheme();
+
 
   const handleLogin = () => {
     if (!email || !password) {
@@ -27,7 +49,7 @@ const LoginScreen = () => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.colors.surface }]}>
       <Text style={[styles.title, { color: theme.colors.primary }]}>Login</Text>
       <TextInput
         label="Email"
@@ -45,21 +67,20 @@ const LoginScreen = () => {
         autoCapitalize="none"
         style={styles.input}
       />
-      <Button
-        mode="contained"
-        onPress={handleLogin}
-        style={styles.button}
-      >
-        Login
-      </Button>
-      <Button
-        mode="outlined"
+      <LoginPageButton
+      mode={"outlined"}
+      onPress={handleLogin}
+      text="Login"
+      color={theme.colors.secondary}
+      textColor={theme.colors.onPrimary}
+      />
+      <LoginPageButton
+        mode={"contained"}
         onPress={handleSignUpNavigate}
-        style={styles.button}
-        textColor={theme.colors.primary}
-      >
-        Sign Up
-      </Button>
+        text="Sign Up"
+        color={theme.colors.primary}
+        textColor={theme.colors.onPrimary}
+      />
     </View>
   );
 };

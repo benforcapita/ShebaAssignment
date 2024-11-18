@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet,Alert } from 'react-native';
 import { Text, Button, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
@@ -7,6 +7,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenNames } from '../navigation/types';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as fs from 'expo-file-system';
+import { Doctor } from '../context/interfaces';
 
 const generateUUID = () => {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -43,10 +44,18 @@ const AppointmentSummaryScreen = () => {
 
   const saveAppointmentToFile = async () => {
     try {
-      const fileUri = fs.documentDirectory + 'data/appointments.json';
+      const directoryUri = fs.documentDirectory + 'data/';
+      const fileUri = directoryUri + 'appointments.json';
+      const dirInfo = await fs.getInfoAsync(directoryUri);
+      if (!dirInfo.exists) {
+        await fs.makeDirectoryAsync(directoryUri, { intermediates: true });
+      }
+
+      let appointments: { id: string; doctor: Doctor; date: string; time: string; }[] = [];
       const fileInfo = await fs.getInfoAsync(fileUri);
-      let appointments = [];
-      if (fileInfo.exists) {
+      if (!fileInfo.exists) {
+        await fs.writeAsStringAsync(fileUri, JSON.stringify(appointments), { encoding: fs.EncodingType.UTF8 });
+      } else {
         const fileData = await fs.readAsStringAsync(fileUri, { encoding: fs.EncodingType.UTF8 });
         appointments = JSON.parse(fileData);
       }
@@ -56,6 +65,14 @@ const AppointmentSummaryScreen = () => {
 
       await fs.writeAsStringAsync(fileUri, JSON.stringify(appointments, null, 2), { encoding: fs.EncodingType.UTF8 });
       console.log('Appointment saved successfully!');
+
+      Alert.alert(
+        'Success',
+        'Appointment saved successfully!',
+        [
+          { text: 'OK', onPress: () => navigation.navigate(ScreenNames.UserAppointmentsScreen) }
+        ]
+      );
     } catch (error) {
       console.error('Error saving appointment:', error);
     }

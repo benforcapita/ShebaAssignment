@@ -5,6 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import * as FileSystem from 'expo-file-system';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenNames } from '../navigation/types';
+import * as fs from 'expo-file-system';
+import * as Crypto from 'expo-crypto';
 
 type SignUpScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -15,36 +17,55 @@ const SignUpScreen = () => {
   const navigation = useNavigation<SignUpScreenNavigationProp>();
   const theme = useTheme();
 
+  const hashPassword = async (password: string) => {
+    const hashedPassword = await Crypto.digestStringAsync(
+      Crypto.CryptoDigestAlgorithm.SHA256,
+      password
+    );
+    return hashedPassword;
+  };
+
   const handleSignUp = async () => {
     if (!name || !email || !password) {
       Alert.alert('Error', 'All fields are required.');
       return;
     }
 
-    const user = { name, email, password };
-    const fileUri = `${FileSystem.documentDirectory}users.json`;
+    console.log('Starting sign-up process');
+    console.log('User input:', { name, email, password });
 
     try {
-      const fileInfo = await FileSystem.getInfoAsync(fileUri);
-      let users = [];
+      const hashedPassword = await hashPassword(password);
+      console.log('Hashed password:', hashedPassword);
+      const user = { name, email, password: hashedPassword };
+      console.log('User data to save:', user);
 
-      if (fileInfo.exists) {
-        const data = await FileSystem.readAsStringAsync(fileUri);
-        users = JSON.parse(data);
-      }
+      const filePath = `${FileSystem.documentDirectory}users.json`;
 
-      const userExists = users.some((u: { email: string }) => u.email === email);
+      try {
+        const fileInfo = await fs.getInfoAsync(filePath);
+        let users = [];
 
-      if (userExists) {
-        Alert.alert('Error', 'User with this email already exists.');
-      } else {
-        users.push(user);
-        await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(users));
-        Alert.alert('Success', 'Account created successfully.');
-        navigation.navigate(ScreenNames.LoginScreen);
+        if (fileInfo.exists) {
+          const data = await fs.readAsStringAsync(filePath, { encoding: 'utf8' });
+          users = JSON.parse(data);
+        }
+
+        const userExists = users.some((u: { email: string }) => u.email === email);
+
+        if (userExists) {
+          Alert.alert('Error', 'User with this email already exists.');
+        } else {
+          users.push(user);
+          await fs.writeAsStringAsync(filePath, JSON.stringify(users, null, 2));
+          Alert.alert('Success', 'Account created successfully.');
+          navigation.navigate(ScreenNames.LoginScreen);
+        }
+      } catch (error) {
+        console.error('Error reading or writing file:', error);
       }
     } catch (error) {
-      Alert.alert('Error', 'An error occurred while creating the account.');
+      console.error('Error during sign-up:', error);
     }
   };
 

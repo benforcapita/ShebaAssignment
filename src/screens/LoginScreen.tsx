@@ -5,9 +5,10 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenNames } from '../navigation/types';
 import LoginPageButton from '../components/loginButton';
+import * as FileSystem from 'expo-file-system';
+import * as Crypto from 'expo-crypto';
 
 type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList>;
-
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -15,14 +16,37 @@ const LoginScreen = () => {
   const navigation = useNavigation<LoginScreenNavigationProp>();
   const theme = useTheme();
 
+  const validateUser = async (email: string, password: string) => {
+    const filePath = `${FileSystem.documentDirectory}users.json`;
+    const fileInfo = await FileSystem.getInfoAsync(filePath);
+    if (!fileInfo.exists) {
+      return false;
+    }
+    const data = await FileSystem.readAsStringAsync(filePath, { encoding: 'utf8' });
+    const users = JSON.parse(data);
+    const user = users.find((u: { email: string }) => u.email === email);
+    if (!user) {
+      return false;
+    }
+    const hashedInputPassword = await Crypto.digestStringAsync(
+      Crypto.CryptoDigestAlgorithm.SHA256,
+      password
+    );
+    return user.password === hashedInputPassword;
+  };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert('Error', 'Please enter both email and password.');
       return;
     }
-    console.log(`Email: ${email}, Password: ${password}`);
-    navigation.navigate(ScreenNames.OTPScreen);
+    const isValidUser = await validateUser(email, password);
+    if (isValidUser) {
+      Alert.alert('Success', 'Login successful!');
+      navigation.navigate(ScreenNames.OTPScreen);
+    } else {
+      Alert.alert('Error', 'Invalid email or password.');
+    }
   };
 
   const handleSignUpNavigate = () => {
@@ -49,11 +73,11 @@ const LoginScreen = () => {
         style={styles.input}
       />
       <LoginPageButton
-      mode={"outlined"}
-      onPress={handleLogin}
-      text="Login"
-      color={theme.colors.secondary}
-      textColor={theme.colors.onPrimary}
+        mode={"outlined"}
+        onPress={handleLogin}
+        text="Login"
+        color={theme.colors.secondary}
+        textColor={theme.colors.onPrimary}
       />
       <LoginPageButton
         mode={"contained"}

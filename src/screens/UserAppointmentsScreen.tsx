@@ -1,11 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Alert } from 'react-native';
 import { Text, Button, useTheme, List, Divider } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenNames } from '../navigation/types';
-import AppointmentItem from '../components/AppointmentItem';
 import * as fs from 'expo-file-system';
 import { Appointment } from '../context/interfaces';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -35,6 +34,42 @@ const UserAppointmentsScreen = () => {
     fetchAppointments();
   }, []);
 
+  const deleteAppointment = async (id: string) => {
+    try {
+      const updatedAppointments = appointments.filter((appointment) => appointment.id.toString() !== id);
+      setAppointments(updatedAppointments);
+
+      const fileUri = fs.documentDirectory + 'data/appointments.json';
+      await fs.writeAsStringAsync(fileUri, JSON.stringify(updatedAppointments, null, 2), { encoding: fs.EncodingType.UTF8 });
+      console.log('Appointment deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting appointment:', error);
+    }
+  };
+
+  const confirmDelete = (id: string) => {
+    Alert.alert(
+      'Cancel Appointment',
+      'Do you want to cancel this appointment?',
+      [
+        { text: 'No', style: 'cancel' },
+        { text: 'Yes', onPress: () => deleteAppointment(id) },
+      ],
+      { cancelable: true }
+    );
+  };
+
+  const renderItem = ({ item }: { item: Appointment }) => {
+    return (
+      <List.Item
+        title={`Doctor: ${item.doctor.name}`}
+        description={`Date: ${item.date} | Time: ${item.time}`}
+        left={props => <List.Icon {...props} icon="calendar" />}
+        onPress={() => confirmDelete(item.id.toString())}
+      />
+    );
+  };
+
   if (appointments.length === 0) {
     return (
       <SafeAreaView style={styles.centeredContainer}>
@@ -57,11 +92,7 @@ const UserAppointmentsScreen = () => {
       <List.Section>
         {appointments.map((item) => (
           <React.Fragment key={item.id.toString()}>
-            <List.Item
-              title={`Doctor: ${item.doctor.name}`}
-              description={`Date: ${item.date} | Time: ${item.time}`}
-              left={props => <List.Icon {...props} icon="calendar" />}
-            />
+            {renderItem({ item })}
             <Divider />
           </React.Fragment>
         ))}

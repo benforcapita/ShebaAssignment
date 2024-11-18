@@ -8,6 +8,13 @@ import { RootStackParamList, ScreenNames } from '../navigation/types';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as fs from 'expo-file-system';
 
+const generateUUID = () => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+};
+
 const AppointmentSummaryScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const context = useContext(AppContext);
@@ -43,7 +50,10 @@ const AppointmentSummaryScreen = () => {
         const fileData = await fs.readAsStringAsync(fileUri, { encoding: fs.EncodingType.UTF8 });
         appointments = JSON.parse(fileData);
       }
-      appointments.push(appointmentDetails);
+
+      const newAppointment = { ...appointmentDetails, id: generateUUID() };
+      appointments.push(newAppointment);
+
       await fs.writeAsStringAsync(fileUri, JSON.stringify(appointments, null, 2), { encoding: fs.EncodingType.UTF8 });
       console.log('Appointment saved successfully!');
     } catch (error) {

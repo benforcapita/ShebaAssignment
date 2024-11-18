@@ -15,7 +15,7 @@ const OTPScreen = () => {
   const handleVerifyOTP = () => {
     if (otp.length === 5) {
       Alert.alert('Success', 'OTP Verified');
-      navigation.navigate(ScreenNames.FieldSelectionScreen);
+      navigation.navigate(ScreenNames.UserAppointmentsScreen);
     } else {
       Alert.alert('Error', 'Please enter a 5-digit OTP');
     }

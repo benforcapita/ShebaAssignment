@@ -1,45 +1,28 @@
-import React, { createContext, useState, ReactNode } from 'react';
+import React, { createContext, useState, ReactNode, Dispatch, SetStateAction } from 'react';
+import { User, Doctor, Appointment } from './interfaces';
 
-interface User {
-  email: string;
-}
-
-interface Doctor {
-  id: number;
-  name: string;
-  field: string;
-  availableDates: string[];
-  timeSlots: string[];
-}
-
-interface AppointmentDetails {
-  doctor: Doctor | null;
-  date: string | null;
-  time: string | null;
-}
 
 interface AppContextProps {
   user: User | null;
-  setUser: (user: User | null) => void;
+  setUser: Dispatch<SetStateAction<User | null>>;
   selectedField: string | null;
-  setSelectedField: (field: string | null) => void;
+  setSelectedField: Dispatch<SetStateAction<string | null>>;
   selectedDoctor: Doctor | null;
-  setSelectedDoctor: (doctor: Doctor | null) => void;
-  appointmentDetails: AppointmentDetails | null;
-  setAppointmentDetails: (details: AppointmentDetails | null) => void;
+  setSelectedDoctor: Dispatch<SetStateAction<Doctor | null>>;
+  appointmentDetails: Appointment | null;
+  setAppointmentDetails: Dispatch<SetStateAction<Appointment | null>>;
+  userAppointments: Appointment[];
+  setUserAppointments: Dispatch<SetStateAction<Appointment[]>>;
 }
 
 export const AppContext = createContext<AppContextProps | undefined>(undefined);
 
-interface AppProviderProps {
-  children: ReactNode;
-}
-
-export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
+export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [selectedField, setSelectedField] = useState<string | null>(null);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
-  const [appointmentDetails, setAppointmentDetails] = useState<AppointmentDetails | null>(null);
+  const [appointmentDetails, setAppointmentDetails] = useState<Appointment | null>(null);
+  const [userAppointments, setUserAppointments] = useState<Appointment[]>([]);
 
   return (
     <AppContext.Provider
@@ -52,6 +35,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setSelectedDoctor,
         appointmentDetails,
         setAppointmentDetails,
+        userAppointments,
+        setUserAppointments,
       }}
     >
       {children}

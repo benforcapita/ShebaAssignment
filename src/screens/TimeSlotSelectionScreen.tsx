@@ -44,6 +44,7 @@ const TimeSlotSelectionScreen = () => {
         doctor: selectedDoctor,
         date: selectedDate,
         time: selectedTime,
+        id: 0,
       });
       navigation.navigate(ScreenNames.AppointmentSummaryScreen);
     } else {

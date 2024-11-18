@@ -9,6 +9,7 @@ import DoctorSelectionScreen from '../screens/DoctorSelectionScreen';
 import TimeSlotSelectionScreen from '../screens/TimeSlotSelectionScreen';
 import AppointmentSummaryScreen from '../screens/AppointmentSummeryScreen';
 import SignUpScreen from '../screens/SignUpScreen';
+import UserAppointmentsScreen from '../screens/UserAppointmentsScreen';
 
 const Stack = createStackNavigator();
 
@@ -19,6 +20,7 @@ const AppNavigator = () => {
         <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false }} />
         <Stack.Screen name="SignUpScreen" component={SignUpScreen} options={{ headerShown: false }} />
         <Stack.Screen name="OTPScreen" component={OTPScreen} options={{ headerShown: false }} />
+        <Stack.Screen name={"UserAppointmentsScreen"} component={UserAppointmentsScreen} options={{ headerShown: false }} />
         <Stack.Screen name="FieldSelectionScreen" component={FieldSelectionScreen} options={{ headerShown: false }} />
         <Stack.Screen name="DoctorSelectionScreen" component={DoctorSelectionScreen} options={{ headerShown: false }} />
         <Stack.Screen name="TimeSlotSelectionScreen" component={TimeSlotSelectionScreen} options={{ headerShown: false }} />

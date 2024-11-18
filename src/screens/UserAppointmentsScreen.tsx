@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Alert } from 'react-native';
+import { StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { Text, Button, useTheme, List, Divider } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
@@ -61,12 +61,13 @@ const UserAppointmentsScreen = () => {
 
   const renderItem = ({ item }: { item: Appointment }) => {
     return (
-      <List.Item
-        title={`Doctor: ${item.doctor.name}`}
-        description={`Date: ${item.date} | Time: ${item.time}`}
-        left={props => <List.Icon {...props} icon="calendar" />}
-        onPress={() => confirmDelete(item.id.toString())}
-      />
+      <TouchableOpacity onPress={() => confirmDelete(item.id.toString())} style={styles.appointmentCard}>
+        <List.Item
+          title={`Doctor: ${item.doctor.name}`}
+          description={`Date: ${item.date} | Time: ${item.time}`}
+          left={props => <List.Icon {...props} icon="calendar" />}
+        />
+      </TouchableOpacity>
     );
   };
 
@@ -115,10 +116,15 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#f8f9fa',
   },
-  centeredContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  appointmentCard: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    marginVertical: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   title: {
     fontSize: 24,
@@ -133,9 +139,15 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
   },
+  centeredContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+  },
   emptyText: {
     fontSize: 18,
-    textAlign: 'center',
+    marginBottom: 16,
   },
 });
 

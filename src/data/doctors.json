@@ -20,8 +20,307 @@
       "2024-11-22"
     ],
     "timeSlots": [
+      "11:00 AM",
+      "3:00 PM"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Dr. Emily Johnson",
+    "field": "Neurology",
+    "availableDates": [
+      "2024-11-23",
+      "2024-11-24"
+    ],
+    "timeSlots": [
       "9:00 AM",
       "1:00 PM"
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Dr. Michael Brown",
+    "field": "Pediatrics",
+    "availableDates": [
+      "2024-11-25",
+      "2024-11-26"
+    ],
+    "timeSlots": [
+      "10:30 AM",
+      "2:30 PM"
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Dr. Sarah Davis",
+    "field": "Dermatology",
+    "availableDates": [
+      "2024-11-27",
+      "2024-11-28"
+    ],
+    "timeSlots": [
+      "11:30 AM",
+      "3:30 PM"
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Dr. William Wilson",
+    "field": "Orthopedics",
+    "availableDates": [
+      "2024-11-29",
+      "2024-11-30"
+    ],
+    "timeSlots": [
+      "9:30 AM",
+      "1:30 PM"
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Dr. Jessica Moore",
+    "field": "Cardiology",
+    "availableDates": [
+      "2024-12-01",
+      "2024-12-02"
+    ],
+    "timeSlots": [
+      "10:15 AM",
+      "2:15 PM"
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Dr. Daniel Taylor",
+    "field": "Neurology",
+    "availableDates": [
+      "2024-12-03",
+      "2024-12-04"
+    ],
+    "timeSlots": [
+      "11:45 AM",
+      "3:45 PM"
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Dr. Laura Anderson",
+    "field": "Pediatrics",
+    "availableDates": [
+      "2024-12-05",
+      "2024-12-06"
+    ],
+    "timeSlots": [
+      "9:45 AM",
+      "1:45 PM"
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Dr. Kevin Martinez",
+    "field": "Dermatology",
+    "availableDates": [
+      "2024-12-07",
+      "2024-12-08"
+    ],
+    "timeSlots": [
+      "10:45 AM",
+      "2:45 PM"
+    ]
+  },
+  {
+    "id": 11,
+    "name": "Dr. Megan Thomas",
+    "field": "Orthopedics",
+    "availableDates": [
+      "2024-12-09",
+      "2024-12-10"
+    ],
+    "timeSlots": [
+      "11:00 AM",
+      "3:00 PM"
+    ]
+  },
+  {
+    "id": 12,
+    "name": "Dr. Andrew Jackson",
+    "field": "Cardiology",
+    "availableDates": [
+      "2024-12-11",
+      "2024-12-12"
+    ],
+    "timeSlots": [
+      "9:00 AM",
+      "1:00 PM"
+    ]
+  },
+  {
+    "id": 13,
+    "name": "Dr. Olivia White",
+    "field": "Neurology",
+    "availableDates": [
+      "2024-12-13",
+      "2024-12-14"
+    ],
+    "timeSlots": [
+      "10:30 AM",
+      "2:30 PM"
+    ]
+  },
+  {
+    "id": 14,
+    "name": "Dr. Christopher Harris",
+    "field": "Pediatrics",
+    "availableDates": [
+      "2024-12-15",
+      "2024-12-16"
+    ],
+    "timeSlots": [
+      "11:30 AM",
+      "3:30 PM"
+    ]
+  },
+  {
+    "id": 15,
+    "name": "Dr. Sophia Martin",
+    "field": "Dermatology",
+    "availableDates": [
+      "2024-12-17",
+      "2024-12-18"
+    ],
+    "timeSlots": [
+      "9:30 AM",
+      "1:30 PM"
+    ]
+  },
+  {
+    "id": 16,
+    "name": "Dr. Ethan Clark",
+    "field": "Orthopedics",
+    "availableDates": [
+      "2024-12-19",
+      "2024-12-20"
+    ],
+    "timeSlots": [
+      "10:00 AM",
+      "2:00 PM"
+    ]
+  },
+  {
+    "id": 17,
+    "name": "Dr. Ava Lewis",
+    "field": "Cardiology",
+    "availableDates": [
+      "2024-12-21",
+      "2024-12-22"
+    ],
+    "timeSlots": [
+      "11:00 AM",
+      "3:00 PM"
+    ]
+  },
+  {
+    "id": 18,
+    "name": "Dr. Noah Walker",
+    "field": "Neurology",
+    "availableDates": [
+      "2024-12-23",
+      "2024-12-24"
+    ],
+    "timeSlots": [
+      "9:00 AM",
+      "1:00 PM"
+    ]
+  },
+  {
+    "id": 19,
+    "name": "Dr. Mia Hall",
+    "field": "Pediatrics",
+    "availableDates": [
+      "2024-12-25",
+      "2024-12-26"
+    ],
+    "timeSlots": [
+      "10:30 AM",
+      "2:30 PM"
+    ]
+  },
+  {
+    "id": 20,
+    "name": "Dr. Lucas Allen",
+    "field": "Dermatology",
+    "availableDates": [
+      "2024-12-27",
+      "2024-12-28"
+    ],
+    "timeSlots": [
+      "11:30 AM",
+      "3:30 PM"
+    ]
+  },
+  {
+    "id": 21,
+    "name": "Dr. Amelia Scott",
+    "field": "Orthopedics",
+    "availableDates": [
+      "2024-12-29",
+      "2024-12-30"
+    ],
+    "timeSlots": [
+      "9:30 AM",
+      "1:30 PM"
+    ]
+  },
+  {
+    "id": 22,
+    "name": "Dr. Benjamin Young",
+    "field": "Cardiology",
+    "availableDates": [
+      "2024-12-31",
+      "2025-01-01"
+    ],
+    "timeSlots": [
+      "10:15 AM",
+      "2:15 PM"
+    ]
+  },
+  {
+    "id": 23,
+    "name": "Dr. Harper King",
+    "field": "Neurology",
+    "availableDates": [
+      "2025-01-02",
+      "2025-01-03"
+    ],
+    "timeSlots": [
+      "11:45 AM",
+      "3:45 PM"
+    ]
+  },
+  {
+    "id": 24,
+    "name": "Dr. James Wright",
+    "field": "Pediatrics",
+    "availableDates": [
+      "2025-01-04",
+      "2025-01-05"
+    ],
+    "timeSlots": [
+      "9:45 AM",
+      "1:45 PM"
+    ]
+  },
+  {
+    "id": 25,
+    "name": "Dr. Ella Green",
+    "field": "Dermatology",
+    "availableDates": [
+      "2025-01-06",
+      "2025-01-07"
+    ],
+    "timeSlots": [
+      "10:45 AM",
+      "2:45 PM"
     ]
   }
 ]

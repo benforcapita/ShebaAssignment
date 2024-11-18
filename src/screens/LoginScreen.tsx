@@ -4,30 +4,11 @@ import { TextInput, Button, Text, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenNames } from '../navigation/types';
+import LoginPageButton from '../components/loginButton';
 
 type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
-interface LoginPageButtonProps {
-  mode: 'text' | 'outlined' | 'contained';
-  onPress: () => void;
-  text: string;
-  color?: string;
-  textColor?: string;
-}
 
-const LoginPageButton: React.FC<LoginPageButtonProps> = ({ mode, onPress, text, color, textColor }) => {
-  return (
-    <Button
-      mode={mode}
-      onPress={onPress}
-      style={styles.button}
-      buttonColor={color}
-      textColor={textColor}
-    >
-      {text}
-    </Button>
-  );
-};
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

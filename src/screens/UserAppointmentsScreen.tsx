@@ -5,9 +5,14 @@ import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenNames } from '../navigation/types';
-import * as fs from 'expo-file-system';
-import { Appointment } from '../context/interfaces';
+import { Appointment, User } from '../context/interfaces';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Platform } from 'react-native';
+import WebStorage from '../storage/WebStorage';
+import NativeStorage from '../storage/NativeStorage';
+import { StorageInterface } from '../storage/StorageInterface';
+
+const storage: StorageInterface = Platform.OS === 'web' ? new WebStorage() : new NativeStorage();
 
 const UserAppointmentsScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
@@ -19,32 +24,36 @@ const UserAppointmentsScreen = () => {
   const [dialogContent, setDialogContent] = useState('');
   const [appointmentId, setAppointmentId] = useState('');
 
-  useEffect(() => {
-    const fetchAppointments = async () => {
+  const fetchAppointments = async (user: User|null|undefined) => {
+    if(user) {
       try {
-        const fileUri = fs.documentDirectory + 'data/appointments.json';
-        const fileInfo = await fs.getInfoAsync(fileUri);
-        if (fileInfo.exists) {
-          const fileData = await fs.readAsStringAsync(fileUri, { encoding: fs.EncodingType.UTF8 });
-          const parsedAppointments = JSON.parse(fileData);
-          const validAppointments = parsedAppointments.filter((appointment: Appointment) => appointment.id !== null && appointment.id !== undefined);
+        await storage.logAllAppointments();
+        const appointmentsData = await storage.getAllAppointments();
+        if (appointmentsData) {
+          console.log('Fetched Appointments:', appointmentsData);
+          const validAppointments = appointmentsData.filter((appointment: Appointment) => appointment.id !== null && appointment.id !== undefined);
           setAppointments(validAppointments);
         }
       } catch (error) {
         console.error('Error reading appointments:', error);
       }
-    };
+    } else {
+      console.warn('No user provided, unable to fetch appointments.');
+      setAppointments([]);
+    }
+  };
 
-    fetchAppointments();
-  }, []);
+  useEffect(() => {
+    console.log('User context:', context?.user);
+    fetchAppointments(context?.user);
+  }, [context?.user]);
 
   const deleteAppointment = async (id: string) => {
     try {
       const updatedAppointments = appointments.filter((appointment) => appointment.id.toString() !== id);
       setAppointments(updatedAppointments);
 
-      const fileUri = fs.documentDirectory + 'data/appointments.json';
-      await fs.writeAsStringAsync(fileUri, JSON.stringify(updatedAppointments, null, 2), { encoding: fs.EncodingType.UTF8 });
+      await storage.deleteAppointment(id);
       console.log('Appointment deleted successfully!');
     } catch (error) {
       console.error('Error deleting appointment:', error);

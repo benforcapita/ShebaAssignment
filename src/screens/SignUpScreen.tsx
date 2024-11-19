@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { TextInput, Button, Text, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import * as FileSystem from 'expo-file-system';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenNames } from '../navigation/types';
-import * as fs from 'expo-file-system';
 import * as Crypto from 'expo-crypto';
+import { Platform } from 'react-native';
+import WebStorage from '../storage/WebStorage';
+import NativeStorage from '../storage/NativeStorage';
+import { StorageInterface } from '../storage/StorageInterface';
 
 type SignUpScreenNavigationProp = StackNavigationProp<RootStackParamList>;
+
+const storage: StorageInterface = Platform.OS === 'web' ? new WebStorage() : new NativeStorage();
 
 const SignUpScreen = () => {
   const [name, setName] = useState('');
@@ -17,12 +21,11 @@ const SignUpScreen = () => {
   const navigation = useNavigation<SignUpScreenNavigationProp>();
   const theme = useTheme();
 
-  const hashPassword = async (password: string) => {
-    const hashedPassword = await Crypto.digestStringAsync(
+  const hashPassword = async (password: string): Promise<string> => {
+    return await Crypto.digestStringAsync(
       Crypto.CryptoDigestAlgorithm.SHA256,
       password
     );
-    return hashedPassword;
   };
 
   const handleSignUp = async () => {
@@ -37,33 +40,10 @@ const SignUpScreen = () => {
     try {
       const hashedPassword = await hashPassword(password);
       console.log('Hashed password:', hashedPassword);
-      const user = { name, email, password: hashedPassword };
-      console.log('User data to save:', user);
-
-      const filePath = `${FileSystem.documentDirectory}users.json`;
-
-      try {
-        const fileInfo = await fs.getInfoAsync(filePath);
-        let users = [];
-
-        if (fileInfo.exists) {
-          const data = await fs.readAsStringAsync(filePath, { encoding: 'utf8' });
-          users = JSON.parse(data);
-        }
-
-        const userExists = users.some((u: { email: string }) => u.email === email);
-
-        if (userExists) {
-          Alert.alert('Error', 'User with this email already exists.');
-        } else {
-          users.push(user);
-          await fs.writeAsStringAsync(filePath, JSON.stringify(users, null, 2));
-          Alert.alert('Success', 'Account created successfully.');
-          navigation.navigate(ScreenNames.LoginScreen);
-        }
-      } catch (error) {
-        console.error('Error reading or writing file:', error);
-      }
+      const user = { id: email, password: hashedPassword };
+      await storage.saveUser(user);
+      Alert.alert('Success', 'Account created successfully.');
+      navigation.navigate(ScreenNames.LoginScreen);
     } catch (error) {
       console.error('Error during sign-up:', error);
     }

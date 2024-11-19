@@ -6,14 +6,23 @@ import { AppContext } from '../context/AppContext';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenNames } from '../navigation/types';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import * as fs from 'expo-file-system';
-import { Doctor } from '../context/interfaces';
+import { Platform } from 'react-native';
+import WebStorage from '../storage/WebStorage';
+import NativeStorage from '../storage/NativeStorage';
+import { StorageInterface } from '../storage/StorageInterface';
 
 const generateUUID = () => {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
   });
+};
+
+const storage: StorageInterface = Platform.OS === 'web' ? new WebStorage() : new NativeStorage();
+
+const saveAppointment = async (appointment: any) => {
+  await storage.saveAppointment(appointment);
+  // Handle post-save actions
 };
 
 const AppointmentSummaryScreen = () => {
@@ -45,28 +54,9 @@ const AppointmentSummaryScreen = () => {
 
   const saveAppointmentToFile = async () => {
     try {
-      const directoryUri = fs.documentDirectory + 'data/';
-      const fileUri = directoryUri + 'appointments.json';
-      const dirInfo = await fs.getInfoAsync(directoryUri);
-      if (!dirInfo.exists) {
-        await fs.makeDirectoryAsync(directoryUri, { intermediates: true });
-      }
-
-      let appointments: { id: string; doctor: Doctor; date: string; time: string; }[] = [];
-      const fileInfo = await fs.getInfoAsync(fileUri);
-      if (!fileInfo.exists) {
-        await fs.writeAsStringAsync(fileUri, JSON.stringify(appointments), { encoding: fs.EncodingType.UTF8 });
-      } else {
-        const fileData = await fs.readAsStringAsync(fileUri, { encoding: fs.EncodingType.UTF8 });
-        appointments = JSON.parse(fileData);
-      }
-
       const newAppointment = { ...appointmentDetails, id: generateUUID() };
-      appointments.push(newAppointment);
-
-      await fs.writeAsStringAsync(fileUri, JSON.stringify(appointments, null, 2), { encoding: fs.EncodingType.UTF8 });
+      await saveAppointment(newAppointment);
       console.log('Appointment saved successfully!');
-
       setVisible(true);
     } catch (error) {
       console.error('Error saving appointment:', error);

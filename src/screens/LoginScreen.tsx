@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { TextInput, Text, useTheme, Dialog, Portal, Button as PaperButton } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenNames } from '../navigation/types';
 import LoginPageButton from '../components/loginButton';
-import * as FileSystem from 'expo-file-system';
+import { Platform } from 'react-native';
+import WebStorage from '../storage/WebStorage';
+import NativeStorage from '../storage/NativeStorage';
+import { StorageInterface } from '../storage/StorageInterface';
 import * as Crypto from 'expo-crypto';
+import { AppContext } from '../context/AppContext';
+
+const storage: StorageInterface = Platform.OS === 'web' ? new WebStorage() : new NativeStorage();
 
 type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -18,23 +24,27 @@ const LoginScreen = () => {
   const [dialogContent, setDialogContent] = useState('');
   const navigation = useNavigation<LoginScreenNavigationProp>();
   const theme = useTheme();
+  const context = useContext(AppContext);
 
-  const validateUser = async (email: string, password: string) => {
-    const filePath = `${FileSystem.documentDirectory}users.json`;
-    const fileInfo = await FileSystem.getInfoAsync(filePath);
-    if (!fileInfo.exists) {
-      return false;
-    }
-    const data = await FileSystem.readAsStringAsync(filePath, { encoding: 'utf8' });
-    const users = JSON.parse(data);
-    const user = users.find((u: { email: string }) => u.email === email);
-    if (!user) {
-      return false;
-    }
-    const hashedInputPassword = await Crypto.digestStringAsync(
+
+  if (!context) {
+    throw new Error('AppContext is undefined. Ensure you are within an AppProvider.');
+  }
+
+
+  const hashPassword = async (password: string): Promise<string> => {
+    return await Crypto.digestStringAsync(
       Crypto.CryptoDigestAlgorithm.SHA256,
       password
     );
+  };
+
+  const validateUser = async (email: string, password: string) => {
+    const user = await storage.getUser(email);
+    if (!user) {
+      return false;
+    }
+    const hashedInputPassword = await hashPassword(password);
     return user.password === hashedInputPassword;
   };
 
@@ -53,6 +63,11 @@ const LoginScreen = () => {
     }
     const isValidUser = await validateUser(email, password);
     if (isValidUser) {
+      const user = await storage.getUser(email);
+      if (!user) {
+        return false;
+      }
+      context.setUser( user);
       showDialog('Success', 'Login successful!');
       navigation.navigate(ScreenNames.OTPScreen);
     } else {

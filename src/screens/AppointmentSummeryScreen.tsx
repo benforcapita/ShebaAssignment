@@ -10,6 +10,7 @@ import { Platform } from 'react-native';
 import WebStorage from '../storage/WebStorage';
 import NativeStorage from '../storage/NativeStorage';
 import { StorageInterface } from '../storage/StorageInterface';
+import centralizedStyles from '../styles/centralizedStyles';
 
 const generateUUID = () => {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -39,8 +40,8 @@ const AppointmentSummaryScreen = () => {
 
   if (!appointmentDetails || !appointmentDetails.doctor) {
     return (
-      <SafeAreaView style={[styles.centeredContainer, { backgroundColor: theme.colors.background }]}>  
-        <Text style={[styles.emptyText, { color: theme.colors.onSurface }]}>No appointment details available.</Text>
+      <SafeAreaView style={[centralizedStyles.centeredContainer, { backgroundColor: theme.colors.background }]}>  
+        <Text style={[centralizedStyles.emptyText, { color: theme.colors.onSurface }]}>No appointment details available.</Text>
       </SafeAreaView>
     );
   }
@@ -66,16 +67,18 @@ const AppointmentSummaryScreen = () => {
   const hideDialog = () => setVisible(false);
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>  
-      <Text style={[styles.title, { color: theme.colors.primary }]}>Appointment Confirmed</Text>
-      <Text style={[styles.detailText, { color: theme.colors.onSurface }]}>Doctor: {doctor.name}</Text>
-      <Text style={[styles.detailText, { color: theme.colors.onSurface }]}>Field: {doctor.field}</Text>
-      <Text style={[styles.detailText, { color: theme.colors.onSurface }]}>Date: {date}</Text>
-      <Text style={[styles.detailText, { color: theme.colors.onSurface }]}>Time: {time}</Text>
+    <SafeAreaView style={[centralizedStyles.container, { backgroundColor: theme.colors.background }]}>  
+      <Text style={[centralizedStyles.title, { color: theme.colors.primary }]}>Appointment Confirmed</Text>
+      <View style={centralizedStyles.centeredTextContainer}>
+      <Text style={[centralizedStyles.detailText, { color: theme.colors.onSurface }]}>Doctor: {doctor.name}</Text>
+      <Text style={[centralizedStyles.detailText, { color: theme.colors.onSurface }]}>Field: {doctor.field}</Text>
+      <Text style={[centralizedStyles.detailText, { color: theme.colors.onSurface }]}>Date: {date}</Text>
+      <Text style={[centralizedStyles.detailText, { color: theme.colors.onSurface }]}>Time: {time}</Text>
+      </View>
       <PaperButton
         mode="contained"
         onPress={handleNewAppointment}
-        style={styles.button}
+        style={centralizedStyles.button}
         buttonColor={theme.colors.primary}
         textColor={theme.colors.onPrimary}
       >
@@ -84,7 +87,7 @@ const AppointmentSummaryScreen = () => {
       <PaperButton
         mode="contained"
         onPress={saveAppointmentToFile}
-        style={styles.button}
+        style={centralizedStyles.button}
         buttonColor={theme.colors.primary}
         textColor={theme.colors.onPrimary}
       >
@@ -104,37 +107,5 @@ const AppointmentSummaryScreen = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 16,
-  },
-  centeredContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
-    textAlign: 'center',
-  },
-  detailText: {
-    fontSize: 18,
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  emptyText: {
-    fontSize: 18,
-    textAlign: 'center',
-  },
-  button: {
-    marginTop: 16,
-    alignSelf: 'center',
-  },
-});
 
 export default AppointmentSummaryScreen;

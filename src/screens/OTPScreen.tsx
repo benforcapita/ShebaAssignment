@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, SafeAreaView } from 'react-native';
 import { TextInput, Button as PaperButton, Text, useTheme, Dialog, Portal } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenNames } from '../navigation/types';
+import centralizedStyles from '../styles/centralizedStyles';
 
 type OTPScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -33,8 +34,9 @@ const OTPScreen = () => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <Text style={[styles.title, { color: theme.colors.primary }]}>Enter OTP</Text>
+    <SafeAreaView style={[centralizedStyles.container, { backgroundColor: theme.colors.background }]}>
+       <View style={centralizedStyles.container}>
+      <Text style={[centralizedStyles.title, { color: theme.colors.primary }]}>Enter OTP</Text>
       <TextInput
         label="5-digit OTP"
         value={otp}
@@ -42,12 +44,12 @@ const OTPScreen = () => {
         keyboardType="numeric"
         maxLength={5}
         autoFocus
-        style={styles.input}
+        style={centralizedStyles.input}
       />
       <PaperButton
         mode="contained"
         onPress={handleVerifyOTP}
-        style={[styles.button, { backgroundColor: theme.colors.primary }]}
+        style={[centralizedStyles.button,{ backgroundColor: theme.colors.secondary }]}
         textColor={theme.colors.onPrimary}
       >
         Verify OTP
@@ -63,28 +65,12 @@ const OTPScreen = () => {
           </Dialog.Actions>
         </Dialog>
       </Portal>
-    </View>
+     
+
+      </View>
+    </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 24,
-    textAlign: 'center',
-  },
-  input: {
-    marginBottom: 16,
-  },
-  button: {
-    marginTop: 8,
-  },
-});
 
 export default OTPScreen;

@@ -11,6 +11,8 @@ import NativeStorage from '../storage/NativeStorage';
 import { StorageInterface } from '../storage/StorageInterface';
 import * as Crypto from 'expo-crypto';
 import { AppContext } from '../context/AppContext';
+import centralizedStyles from '../styles/centralizedStyles';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const storage: StorageInterface = Platform.OS === 'web' ? new WebStorage() : new NativeStorage();
 
@@ -80,15 +82,15 @@ const LoginScreen = () => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.surface }]}>
-      <Text style={[styles.title, { color: theme.colors.primary }]}>Login</Text>
+    <SafeAreaView style={[centralizedStyles.container, { backgroundColor: theme.colors.surface }]}>
+      <Text style={[centralizedStyles.title, { color: theme.colors.primary }]}>Login</Text>
       <TextInput
         label="Email"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
         autoCapitalize="none"
-        style={styles.input}
+        style={centralizedStyles.input}
       />
       <TextInput
         label="Password"
@@ -96,7 +98,7 @@ const LoginScreen = () => {
         onChangeText={setPassword}
         secureTextEntry
         autoCapitalize="none"
-        style={styles.input}
+        style={centralizedStyles.input}
       />
       <LoginPageButton
         mode={"outlined"}
@@ -123,28 +125,10 @@ const LoginScreen = () => {
           </Dialog.Actions>
         </Dialog>
       </Portal>
-    </View>
+    </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 24,
-    textAlign: 'center',
-  },
-  input: {
-    marginBottom: 16,
-  },
-  button: {
-    marginTop: 8,
-  },
-});
+const styles = {};
 
 export default LoginScreen;

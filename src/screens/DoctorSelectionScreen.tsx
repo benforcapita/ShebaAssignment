@@ -1,12 +1,13 @@
 import React, { useContext } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
-import { List, useTheme } from 'react-native-paper';
+import { List, useTheme, Card } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenNames } from '../navigation/types';
 import doctorsData from '../data/doctors.json';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import centralizedStyles from '../styles/centralizedStyles';
 
 type DoctorSelectionNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -46,28 +47,31 @@ const DoctorSelectionScreen = () => {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <SafeAreaView style={[centralizedStyles.container, { backgroundColor: theme.colors.background }]}>
       <List.Section>
         <List.Subheader style={[styles.title, { color: theme.colors.primary }]}>
           Select a Doctor
         </List.Subheader>
         {filteredDoctors.map((doctor) => (
-          <List.Item
-            key={doctor.id}
-            title={doctor.name}
-            description={doctor.field}
-            onPress={() => handleDoctorSelect(doctor)}
-            style={[styles.option, { borderBottomColor: theme.colors.onSurface }]}
-            titleStyle={[styles.optionTitle, { color: theme.colors.onSurface }]}
-            descriptionStyle={[styles.optionSubtitle, { color: theme.colors.onSurface }]}
-            right={(props) => <List.Icon {...props} icon="chevron-right" />}
-          />
+          <Card style={centralizedStyles.chip} key={doctor.id}>
+            <List.Item
+              title={doctor.name}
+              description={doctor.field}
+              onPress={() => handleDoctorSelect(doctor)}
+              style={[styles.option, { borderBottomColor: theme.colors.onSurface }]}
+              titleStyle={[styles.optionTitle, { color: theme.colors.onSurface }]}
+              descriptionStyle={[styles.optionSubtitle, { color: theme.colors.onSurface }]}
+              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+            />
+          </Card>
         ))}
         {filteredDoctors.length === 0 && (
-          <List.Item
-            title="No doctors available for the selected field."
-            titleStyle={[styles.emptyText, { color: theme.colors.onSurface }]}
-          />
+          <Card style={centralizedStyles.chip}>
+            <List.Item
+              title="No doctors available for the selected field."
+              titleStyle={[styles.emptyText, { color: theme.colors.onSurface }]}
+            />
+          </Card>
         )}
       </List.Section>
     </SafeAreaView>
@@ -75,10 +79,6 @@ const DoctorSelectionScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',

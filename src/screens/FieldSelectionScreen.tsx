@@ -11,6 +11,7 @@ import { Doctor } from '../context/interfaces';
 import DoctorSearch from '../components/DoctorSearch';
 import FieldSelection from '../components/FieldSelection';
 import ToggleableCard from '../components/ToggleableCard';
+import centralizedStyles from '../styles/centralizedStyles';
 
 type FieldSelectionNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -83,7 +84,7 @@ const FieldSelectionScreen = () => {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>      
+    <SafeAreaView style={[centralizedStyles.container, { backgroundColor: theme.colors.background }]}>      
       <ToggleableCard title="Search Doctor by Name" onPress={() => toggleSection('doctor')} />
       <Animated.View style={{ height: doctorHeight }}>
         {expandedSection === 'doctor' && (

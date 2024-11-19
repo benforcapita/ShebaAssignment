@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import { Text, Button as PaperButton, useTheme, List, Divider, Dialog, Portal } from 'react-native-paper';
+import { Text, Button as PaperButton, useTheme, List, Divider, Dialog, Portal, Card } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -11,6 +11,7 @@ import { Platform } from 'react-native';
 import WebStorage from '../storage/WebStorage';
 import NativeStorage from '../storage/NativeStorage';
 import { StorageInterface } from '../storage/StorageInterface';
+import centralizedStyles from '../styles/centralizedStyles';
 
 const storage: StorageInterface = Platform.OS === 'web' ? new WebStorage() : new NativeStorage();
 
@@ -76,25 +77,25 @@ const UserAppointmentsScreen = () => {
 
   const renderItem = ({ item }: { item: Appointment }) => {
     return (
-      <TouchableOpacity onPress={() => confirmDelete(item.id.toString())} style={styles.appointmentCard}>
+      <Card onPress={() => confirmDelete(item.id.toString())} style={centralizedStyles.appointmentCard}>
         <List.Item
           title={`Doctor: ${item.doctor.name}`}
           description={`Date: ${item.date} | Time: ${item.time}`}
           left={props => <List.Icon {...props} icon="calendar" />}
         />
-      </TouchableOpacity>
+      </Card>
     );
   };
 
   if (appointments.length === 0) {
     return (
-      <SafeAreaView style={styles.centeredContainer}>
-        <Text style={styles.emptyText}>No appointments available.</Text>
+      <SafeAreaView style={centralizedStyles.centeredContainer}>
+        <Text style={centralizedStyles.emptyText}>No appointments available.</Text>
         <PaperButton
           mode="contained"
           onPress={() => navigation.navigate(ScreenNames.FieldSelectionScreen)}
-          style={styles.button}
-          labelStyle={styles.buttonText}
+          style={[centralizedStyles.button,{backgroundColor: theme.colors.secondary}]}
+          labelStyle={centralizedStyles.button}
         >
           Book New Appointment
         </PaperButton>
@@ -103,8 +104,8 @@ const UserAppointmentsScreen = () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={[styles.title, { color: theme.colors.primary }]}>Your Appointments</Text>
+    <SafeAreaView style={centralizedStyles.container}>
+      <Text style={[centralizedStyles.title, { color: theme.colors.primary }]}>Your Appointments</Text>
       <List.Section>
         {appointments.map((item) => (
           <React.Fragment key={item.id.toString()}>
@@ -116,8 +117,8 @@ const UserAppointmentsScreen = () => {
       <PaperButton
         mode="contained"
         onPress={() => navigation.navigate(ScreenNames.FieldSelectionScreen)}
-        style={styles.button}
-        labelStyle={styles.buttonText}
+        style={centralizedStyles.button}
+        labelStyle={centralizedStyles.button}
       >
         Book New Appointment
       </PaperButton>
@@ -137,45 +138,6 @@ const UserAppointmentsScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: '#f8f9fa',
-  },
-  appointmentCard: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    marginVertical: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
-    textAlign: 'center',
-  },
-  button: {
-    marginTop: 16,
-    alignSelf: 'center',
-  },
-  buttonText: {
-    fontSize: 18,
-  },
-  centeredContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
-  },
-  emptyText: {
-    fontSize: 18,
-    marginBottom: 16,
-  },
-});
+const styles = {};
 
 export default UserAppointmentsScreen;

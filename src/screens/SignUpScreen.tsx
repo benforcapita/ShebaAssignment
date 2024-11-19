@@ -9,6 +9,8 @@ import { Platform } from 'react-native';
 import WebStorage from '../storage/WebStorage';
 import NativeStorage from '../storage/NativeStorage';
 import { StorageInterface } from '../storage/StorageInterface';
+import centralizedStyles from '../styles/centralizedStyles';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type SignUpScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -50,13 +52,13 @@ const SignUpScreen = () => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <Text style={[styles.title, { color: theme.colors.primary }]}>Sign Up</Text>
+    <SafeAreaView style={[centralizedStyles.container, { backgroundColor: theme.colors.background }]}>
+      <Text style={[centralizedStyles.title, { color: theme.colors.primary }]}>Sign Up</Text>
       <TextInput
         label="Name"
         value={name}
         onChangeText={setName}
-        style={styles.input}
+        style={centralizedStyles.input}
       />
       <TextInput
         label="Email"
@@ -64,19 +66,19 @@ const SignUpScreen = () => {
         onChangeText={setEmail}
         keyboardType="email-address"
         autoCapitalize="none"
-        style={styles.input}
+        style={centralizedStyles.input}
       />
       <TextInput
         label="Password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
-        style={styles.input}
+        style={centralizedStyles.input}
       />
       <Button
         mode="contained"
         onPress={handleSignUp}
-        style={[styles.button, { backgroundColor: theme.colors.primary }]}
+        style={[centralizedStyles.button, { backgroundColor: theme.colors.secondary }]}
         textColor={theme.colors.onPrimary}
       >
         Sign Up
@@ -84,36 +86,15 @@ const SignUpScreen = () => {
       <Button
         mode="text"
         onPress={() => navigation.navigate(ScreenNames.LoginScreen)}
-        style={styles.linkButton}
+        style={centralizedStyles.button}
         textColor={theme.colors.primary}
       >
         Already have an account? Log In
       </Button>
-    </View>
+    </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 24,
-    textAlign: 'center',
-  },
-  input: {
-    marginBottom: 16,
-  },
-  button: {
-    marginTop: 8,
-  },
-  linkButton: {
-    marginTop: 16,
-  },
-});
+const styles = {};
 
 export default SignUpScreen;

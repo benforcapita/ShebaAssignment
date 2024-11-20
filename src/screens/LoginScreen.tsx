@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { TextInput, Text, useTheme, Portal } from 'react-native-paper';
+import { TextInput, Text, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenNames } from '../navigation/types';
@@ -115,14 +114,12 @@ const LoginScreen = () => {
         mode="contained"
         textColor={theme.colors.onPrimary}
       />
-      <Portal>
         <CustomDialog
           visible={visible}
           title={dialogTitle}
           content={dialogContent}
           onDismiss={hideDialog}
         />
-      </Portal>
     </SafeAreaView>
   );
 };

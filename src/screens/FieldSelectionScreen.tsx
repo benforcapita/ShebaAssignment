@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
-import { View, StyleSheet, Animated, TouchableOpacity } from 'react-native';
-import { List, useTheme } from 'react-native-paper';
+import React, { useState, useContext, useRef } from 'react';
+import { Animated,  } from 'react-native';
+import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
 import { StackNavigationProp } from '@react-navigation/stack';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dialog, Portal, Text, Button } from 'react-native-paper';
+import { Dialog, Portal, Text } from 'react-native-paper';
 import { View } from 'react-native';
 import centralizedStyles from '../styles/centralizedStyles';
 import CustomButton from './CustomButton';

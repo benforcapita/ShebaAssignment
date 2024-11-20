@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dialog, Text } from 'react-native-paper';
+import { Dialog, Portal, Text } from 'react-native-paper';
 import CustomButton from './CustomButton';
 import { View } from 'react-native';
 import centralizedStyles from '../styles/centralizedStyles';
@@ -20,6 +20,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   onCancel,
 }) => {
   return (
+    <Portal>
     <View style={[centralizedStyles.modalBackground,{ display: visible ? 'flex' : 'none'}]}>
       <View style={centralizedStyles.dialogContainer}>
         <Dialog.Title>{title}</Dialog.Title>
@@ -32,6 +33,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
         </View>
       </View>
     </View>
+    </Portal>
   );
 };
 

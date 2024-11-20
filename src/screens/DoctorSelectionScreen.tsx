@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
-import { List, useTheme, Card } from 'react-native-paper';
+import { List, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -53,25 +53,22 @@ const DoctorSelectionScreen = () => {
           Select a Doctor
         </List.Subheader>
         {filteredDoctors.map((doctor) => (
-          <Card style={centralizedStyles.chip} key={doctor.id}>
-            <List.Item
-              title={doctor.name}
-              description={doctor.field}
-              onPress={() => handleDoctorSelect(doctor)}
-              style={[styles.option, { borderBottomColor: theme.colors.onSurface }]}
-              titleStyle={[styles.optionTitle, { color: theme.colors.onSurface }]}
-              descriptionStyle={[styles.optionSubtitle, { color: theme.colors.onSurface }]}
-              right={(props) => <List.Icon {...props} icon="chevron-right" />}
-            />
-          </Card>
+          <List.Item
+            key={doctor.id}
+            title={doctor.name}
+            description={doctor.field}
+            onPress={() => handleDoctorSelect(doctor)}
+            style={[styles.option, { borderBottomColor: theme.colors.onSurface }]}
+            titleStyle={[styles.optionTitle, { color: theme.colors.onSurface }]}
+            descriptionStyle={[styles.optionSubtitle, { color: theme.colors.onSurface }]}
+            right={(props) => <List.Icon {...props} icon="chevron-right" />}
+          />
         ))}
         {filteredDoctors.length === 0 && (
-          <Card style={centralizedStyles.chip}>
-            <List.Item
-              title="No doctors available for the selected field."
-              titleStyle={[styles.emptyText, { color: theme.colors.onSurface }]}
-            />
-          </Card>
+          <List.Item
+            title="No doctors available for the selected field."
+            titleStyle={[styles.emptyText, { color: theme.colors.onSurface }]}
+          />
         )}
       </List.Section>
     </SafeAreaView>

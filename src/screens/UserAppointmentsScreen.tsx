@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Text, useTheme, List, Divider, Portal, Card } from 'react-native-paper';
+import { View, FlatList } from 'react-native';
+import { Text, useTheme, List, Divider, Card } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -107,20 +107,20 @@ const UserAppointmentsScreen = () => {
   return (
     <SafeAreaView style={centralizedStyles.container}>
       <Text style={[centralizedStyles.title, { color: theme.colors.primary }]}>Your Appointments</Text>
-      <List.Section>
-        {appointments.map((item) => (
-          <React.Fragment key={item.id.toString()}>
-            {renderItem({ item })}
-            <Divider />
-          </React.Fragment>
-        ))}
-      </List.Section>
-      <CustomButton
-        onPress={() => navigation.navigate(ScreenNames.FieldSelectionScreen)}
-        text="Book New Appointment"
-        buttonColor='secondary'
+      <FlatList
+        data={appointments}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={renderItem}
+        ItemSeparatorComponent={() => <Divider />}
+        contentContainerStyle={{ paddingBottom: 100 }} // Add padding to prevent overlap
       />
-      <Portal>
+      <View style={{ position: 'absolute', bottom: '10%', right:'5%',left:'5%' }}>
+        <CustomButton
+          onPress={() => navigation.navigate(ScreenNames.FieldSelectionScreen)}
+          text="Book New Appointment"
+          buttonColor='secondary'
+        />
+      </View>
         <ConfirmationDialog
           visible={visible}
           title={dialogTitle}
@@ -128,7 +128,6 @@ const UserAppointmentsScreen = () => {
           onConfirm={handleDelete}
           onCancel={hideDialog}
         />
-      </Portal>
     </SafeAreaView>
   );
 };

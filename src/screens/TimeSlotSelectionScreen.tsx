@@ -1,12 +1,14 @@
 import React, { useContext, useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
-import { Text, Button, Chip, useTheme } from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
+import { Text, Chip, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenNames } from '../navigation/types';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import centralizedStyles from '../styles/centralizedStyles';
+import CustomDialog from '../components/CustomDialog';
+import CustomButton from '../components/CustomButton';
 
 type TimeSlotScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -23,10 +25,14 @@ const TimeSlotSelectionScreen = () => {
 
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [visible, setVisible] = useState(false);
+  const [dialogTitle, setDialogTitle] = useState('');
+  const [dialogContent, setDialogContent] = useState('');
 
   if (!selectedDoctor) {
-    Alert.alert('Error', 'No doctor selected. Returning to Doctor Selection.');
-    navigation.navigate(ScreenNames.DoctorSelectionScreen);
+    setDialogTitle('Error');
+    setDialogContent('No doctor selected. Returning to Doctor Selection.');
+    setVisible(true);
     return null;
   }
 
@@ -49,7 +55,16 @@ const TimeSlotSelectionScreen = () => {
       });
       navigation.navigate(ScreenNames.AppointmentSummaryScreen);
     } else {
-      Alert.alert('Error', 'Please select both a date and time.');
+      setDialogTitle('Error');
+      setDialogContent('Please select both a date and time.');
+      setVisible(true);
+    }
+  };
+
+  const hideDialog = () => {
+    setVisible(false);
+    if (dialogTitle === 'Error' && dialogContent === 'No doctor selected. Returning to Doctor Selection.') {
+      navigation.navigate(ScreenNames.DoctorSelectionScreen);
     }
   };
 
@@ -94,15 +109,17 @@ const TimeSlotSelectionScreen = () => {
           </View>
         </>
       )}
-      <Button
-        mode="contained"
+      <CustomButton
         onPress={handleConfirm}
-        style={[centralizedStyles.button,{backgroundColor: theme.colors.secondary}]}
-        buttonColor={theme.colors.primary}
-        textColor={theme.colors.onPrimary}
-      >
-        Confirm Appointment
-      </Button>
+        text="Confirm Appointment"
+        buttonColor='secondary'
+      />
+      <CustomDialog
+        visible={visible}
+        title={dialogTitle}
+        content={dialogContent}
+        onDismiss={hideDialog}
+      />
     </SafeAreaView>
   );
 };

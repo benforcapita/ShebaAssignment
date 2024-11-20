@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { View, StyleSheet, } from 'react-native';
-import { Text, Button as PaperButton, useTheme, Dialog, Portal } from 'react-native-paper';
+import { Text, useTheme, } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -11,6 +11,8 @@ import WebStorage from '../storage/WebStorage';
 import NativeStorage from '../storage/NativeStorage';
 import { StorageInterface } from '../storage/StorageInterface';
 import centralizedStyles from '../styles/centralizedStyles';
+import CustomDialog from '../components/CustomDialog';
+import CustomButton from '../components/CustomButton';
 
 const generateUUID = () => {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -75,37 +77,25 @@ const AppointmentSummaryScreen = () => {
       <Text style={[centralizedStyles.detailText, { color: theme.colors.onSurface }]}>Date: {date}</Text>
       <Text style={[centralizedStyles.detailText, { color: theme.colors.onSurface }]}>Time: {time}</Text>
       </View>
-      <PaperButton
+      <CustomButton
         mode="contained"
         onPress={saveAppointmentToFile}
-        style={[centralizedStyles.button,{backgroundColor: theme.colors.secondary}]}
-        buttonColor={theme.colors.primary}
-        textColor={theme.colors.onPrimary}
-      >
-        Save Appointment
-      </PaperButton>
+        buttonColor='secondary'
+        text='Save Appointment'
+      />
 
-      <PaperButton
+      <CustomButton
         mode="contained"
         onPress={handleNewAppointment}
-        style={centralizedStyles.button}
-        buttonColor={theme.colors.primary}
-        textColor={theme.colors.onPrimary}
-      >
-        Back to Main Menu
-      </PaperButton>
+        text='Back to Main Menu'
+      />
    
-      <Portal>
-        <Dialog visible={visible} onDismiss={hideDialog}>
-          <Dialog.Title>Success</Dialog.Title>
-          <Dialog.Content>
-            <Text>Appointment saved successfully!</Text>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <PaperButton onPress={() => { hideDialog(); navigation.navigate(ScreenNames.UserAppointmentsScreen) }}>OK</PaperButton>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
+      <CustomDialog
+        visible={visible}
+        title="Success"
+        content="Appointment saved successfully!"
+        onDismiss={() => { hideDialog(); navigation.navigate(ScreenNames.UserAppointmentsScreen); }}
+      />
     </SafeAreaView>
   );
 };

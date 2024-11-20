@@ -39,6 +39,10 @@ const centralizedStyles = StyleSheet.create({
   button: {
     marginTop: 8,
   },
+  longButton: {
+    marginTop: 8,
+    width: '100%',
+  },
   chipContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -73,6 +77,28 @@ const centralizedStyles = StyleSheet.create({
     borderRadius: 5,
     borderColor: 'black',
     
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  dialogContainer: {
+    width: '80%',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  actionsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 10,
   },
 });
 

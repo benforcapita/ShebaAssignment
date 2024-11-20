@@ -1,10 +1,10 @@
 import React, { useState, useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { TextInput, Text, useTheme, Dialog, Portal, Button as PaperButton } from 'react-native-paper';
+import { TextInput, Text, useTheme, Portal } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenNames } from '../navigation/types';
-import LoginPageButton from '../components/loginButton';
+import CustomButton from '../components/CustomButton';
 import { Platform } from 'react-native';
 import WebStorage from '../storage/WebStorage';
 import NativeStorage from '../storage/NativeStorage';
@@ -13,6 +13,7 @@ import * as Crypto from 'expo-crypto';
 import { AppContext } from '../context/AppContext';
 import centralizedStyles from '../styles/centralizedStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import CustomDialog from '../components/CustomDialog';
 
 const storage: StorageInterface = Platform.OS === 'web' ? new WebStorage() : new NativeStorage();
 
@@ -100,30 +101,27 @@ const LoginScreen = () => {
         autoCapitalize="none"
         style={centralizedStyles.input}
       />
-      <LoginPageButton
-        mode={"outlined"}
+      <CustomButton
         onPress={handleLogin}
         text="Login"
-        color={theme.colors.secondary}
+        mode="outlined"
+        style={{ marginBottom: 8 }}
         textColor={theme.colors.onPrimary}
+        buttonColor='secondary'
       />
-      <LoginPageButton
-        mode={"contained"}
+      <CustomButton
         onPress={handleSignUpNavigate}
         text="Sign Up"
-        color={theme.colors.primary}
+        mode="contained"
         textColor={theme.colors.onPrimary}
       />
       <Portal>
-        <Dialog visible={visible} onDismiss={hideDialog}>
-          <Dialog.Title>{dialogTitle}</Dialog.Title>
-          <Dialog.Content>
-            <Text>{dialogContent}</Text>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <PaperButton onPress={hideDialog}>OK</PaperButton>
-          </Dialog.Actions>
-        </Dialog>
+        <CustomDialog
+          visible={visible}
+          title={dialogTitle}
+          content={dialogContent}
+          onDismiss={hideDialog}
+        />
       </Portal>
     </SafeAreaView>
   );

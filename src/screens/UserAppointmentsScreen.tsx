@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Text, Button as PaperButton, useTheme, List, Divider, Dialog, Portal, Card } from 'react-native-paper';
+import { Text, useTheme, List, Divider, Portal, Card } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -12,6 +12,8 @@ import WebStorage from '../storage/WebStorage';
 import NativeStorage from '../storage/NativeStorage';
 import { StorageInterface } from '../storage/StorageInterface';
 import centralizedStyles from '../styles/centralizedStyles';
+import CustomButton from '../components/CustomButton';
+import ConfirmationDialog from '../components/ConfirmationDialog';
 
 const storage: StorageInterface = Platform.OS === 'web' ? new WebStorage() : new NativeStorage();
 
@@ -92,14 +94,11 @@ const UserAppointmentsScreen = () => {
       <SafeAreaView style={centralizedStyles.container}>
         <View>
         <Text style={centralizedStyles.emptyText}>No appointments available.</Text>
-        <PaperButton
-          mode="contained"
+        <CustomButton
           onPress={() => navigation.navigate(ScreenNames.FieldSelectionScreen)}
-          style={[centralizedStyles.button,{backgroundColor: theme.colors.secondary}]}
-          labelStyle={centralizedStyles.button}
-        >
-          Book New Appointment
-        </PaperButton>
+          text="Book New Appointment"
+          buttonColor='secondary'
+        />
         </View>
       </SafeAreaView>
     );
@@ -116,25 +115,19 @@ const UserAppointmentsScreen = () => {
           </React.Fragment>
         ))}
       </List.Section>
-      <PaperButton
-        mode="contained"
+      <CustomButton
         onPress={() => navigation.navigate(ScreenNames.FieldSelectionScreen)}
-        style={[centralizedStyles.button,{backgroundColor: theme.colors.secondary}]}
-        labelStyle={centralizedStyles.button}
-      >
-        Book New Appointment
-      </PaperButton>
+        text="Book New Appointment"
+        buttonColor='secondary'
+      />
       <Portal>
-        <Dialog visible={visible} onDismiss={hideDialog}>
-          <Dialog.Title>{dialogTitle}</Dialog.Title>
-          <Dialog.Content>
-            <Text>{dialogContent}</Text>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <PaperButton onPress={hideDialog}>No</PaperButton>
-            <PaperButton onPress={handleDelete}>Yes</PaperButton>
-          </Dialog.Actions>
-        </Dialog>
+        <ConfirmationDialog
+          visible={visible}
+          title={dialogTitle}
+          content={dialogContent}
+          onConfirm={handleDelete}
+          onCancel={hideDialog}
+        />
       </Portal>
     </SafeAreaView>
   );

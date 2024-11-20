@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
-import { TextInput, Button, Text, useTheme } from 'react-native-paper';
+import { TextInput, Text, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenNames } from '../navigation/types';
@@ -11,6 +11,7 @@ import NativeStorage from '../storage/NativeStorage';
 import { StorageInterface } from '../storage/StorageInterface';
 import centralizedStyles from '../styles/centralizedStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import CustomButton from '../components/CustomButton';
 
 type SignUpScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -75,22 +76,15 @@ const SignUpScreen = () => {
         secureTextEntry
         style={centralizedStyles.input}
       />
-      <Button
-        mode="contained"
+      <CustomButton
         onPress={handleSignUp}
-        style={[centralizedStyles.button, { backgroundColor: theme.colors.secondary }]}
-        textColor={theme.colors.onPrimary}
-      >
-        Sign Up
-      </Button>
-      <Button
-        mode="text"
+        text="Sign Up"
+        buttonColor='secondary'
+      />
+      <CustomButton
         onPress={() => navigation.navigate(ScreenNames.LoginScreen)}
-        style={centralizedStyles.button}
-        textColor={theme.colors.primary}
-      >
-        Already have an account? Log In
-      </Button>
+        text="Already have an account? Log In"
+      />
     </SafeAreaView>
   );
 };

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, SafeAreaView } from 'react-native';
-import { TextInput, Button as PaperButton, Text, useTheme, Dialog, Portal } from 'react-native-paper';
+import { TextInput, Text, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenNames } from '../navigation/types';
 import centralizedStyles from '../styles/centralizedStyles';
+import CustomDialog from '../components/CustomDialog';
+import CustomButton from '../components/CustomButton';
 
 type OTPScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -46,25 +48,18 @@ const OTPScreen = () => {
         autoFocus
         style={centralizedStyles.input}
       />
-      <PaperButton
-        mode="contained"
+      <CustomButton
         onPress={handleVerifyOTP}
+        text="Verify OTP"
         style={[centralizedStyles.button,{ backgroundColor: theme.colors.secondary }]}
         textColor={theme.colors.onPrimary}
-      >
-        Verify OTP
-      </PaperButton>
-      <Portal>
-        <Dialog visible={visible} onDismiss={hideDialog}>
-          <Dialog.Title>{dialogTitle}</Dialog.Title>
-          <Dialog.Content>
-            <Text>{dialogContent}</Text>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <PaperButton onPress={hideDialog}>OK</PaperButton>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
+      />
+      <CustomDialog
+        visible={visible}
+        title={dialogTitle}
+        content={dialogContent}
+        onDismiss={hideDialog}
+      />
      
 
       </View>

@@ -40,7 +40,14 @@ class WebStorage implements StorageInterface {
   }
 
   async logAllAppointments(): Promise<void> {
-    console.log('All appointment keys:', Object.keys(localStorage).filter(key => key.startsWith('appointment_')));
+    // Check if there are any appointment keys
+    const appointmentKeys = Object.keys(localStorage).filter(key => key.startsWith('appointment_'));
+    if (appointmentKeys.length === 0) {
+      console.log('No appointments found. Initializing storage.');
+      // Optionally, initialize with a default or empty state
+    }
+    
+    console.log('All appointment keys:', appointmentKeys);
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key && key.startsWith('appointment_')) {

@@ -97,7 +97,7 @@ const TimeSlotSelectionScreen = () => {
       <Button
         mode="contained"
         onPress={handleConfirm}
-        style={centralizedStyles.confirmButton}
+        style={[centralizedStyles.button,{backgroundColor: theme.colors.secondary}]}
         buttonColor={theme.colors.primary}
         textColor={theme.colors.onPrimary}
       >

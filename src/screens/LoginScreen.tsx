@@ -129,6 +129,5 @@ const LoginScreen = () => {
   );
 };
 
-const styles = {};
 
 export default LoginScreen;

@@ -12,11 +12,11 @@ The Hospital Appointment App is a React Native application designed to streamlin
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/hospital-appointment-app.git
+   git clone https://github.com/benforcapita/ShebaAssignment.git
    ```
 2. Navigate to the project directory:
    ```bash
-   cd hospital-appointment-app
+   cd ShebaAssignment
    ```
 3. Install dependencies:
    ```bash

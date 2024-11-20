@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Text, Button as PaperButton, useTheme, List, Divider, Dialog, Portal, Card } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../context/AppContext';
@@ -89,7 +89,8 @@ const UserAppointmentsScreen = () => {
 
   if (appointments.length === 0) {
     return (
-      <SafeAreaView style={centralizedStyles.centeredContainer}>
+      <SafeAreaView style={centralizedStyles.container}>
+        <View>
         <Text style={centralizedStyles.emptyText}>No appointments available.</Text>
         <PaperButton
           mode="contained"
@@ -99,6 +100,7 @@ const UserAppointmentsScreen = () => {
         >
           Book New Appointment
         </PaperButton>
+        </View>
       </SafeAreaView>
     );
   }
@@ -117,7 +119,7 @@ const UserAppointmentsScreen = () => {
       <PaperButton
         mode="contained"
         onPress={() => navigation.navigate(ScreenNames.FieldSelectionScreen)}
-        style={centralizedStyles.button}
+        style={[centralizedStyles.button,{backgroundColor: theme.colors.secondary}]}
         labelStyle={centralizedStyles.button}
       >
         Book New Appointment
@@ -138,6 +140,5 @@ const UserAppointmentsScreen = () => {
   );
 };
 
-const styles = {};
 
 export default UserAppointmentsScreen;

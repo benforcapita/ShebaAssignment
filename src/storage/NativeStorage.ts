@@ -87,6 +87,13 @@ class NativeStorage implements StorageInterface {
   }
 
   async logAllAppointments(): Promise<void> {
+    // Ensure the appointments directory exists
+    const dirInfo = await FileSystem.getInfoAsync(this.appointmentDir);
+    if (!dirInfo.exists) {
+      await FileSystem.makeDirectoryAsync(this.appointmentDir, { intermediates: true });
+      console.log('Appointments directory created.');
+    }
+    
     const directoryInfo = await FileSystem.readDirectoryAsync(this.appointmentDir);
     console.log('All appointment files:', directoryInfo);
     for (const fileName of directoryInfo) {

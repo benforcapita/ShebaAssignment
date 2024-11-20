@@ -77,6 +77,16 @@ const AppointmentSummaryScreen = () => {
       </View>
       <PaperButton
         mode="contained"
+        onPress={saveAppointmentToFile}
+        style={[centralizedStyles.button,{backgroundColor: theme.colors.secondary}]}
+        buttonColor={theme.colors.primary}
+        textColor={theme.colors.onPrimary}
+      >
+        Save Appointment
+      </PaperButton>
+
+      <PaperButton
+        mode="contained"
         onPress={handleNewAppointment}
         style={centralizedStyles.button}
         buttonColor={theme.colors.primary}
@@ -84,15 +94,7 @@ const AppointmentSummaryScreen = () => {
       >
         Back to Main Menu
       </PaperButton>
-      <PaperButton
-        mode="contained"
-        onPress={saveAppointmentToFile}
-        style={centralizedStyles.button}
-        buttonColor={theme.colors.primary}
-        textColor={theme.colors.onPrimary}
-      >
-        Save Appointment
-      </PaperButton>
+   
       <Portal>
         <Dialog visible={visible} onDismiss={hideDialog}>
           <Dialog.Title>Success</Dialog.Title>
